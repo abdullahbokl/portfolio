@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:portfolio/app/theme/app_colors.dart';
-import 'package:portfolio/app/theme/app_text_styles.dart';
 import 'package:portfolio/bloc/navigation/navigation_cubit.dart';
-import 'package:portfolio/bloc/navigation/navigation_state.dart';
-import 'package:portfolio/bloc/theme/theme_cubit.dart';
-import 'package:portfolio/bloc/theme/theme_state.dart';
-import 'package:portfolio/core/constants/app_strings.dart';
-import 'package:portfolio/core/extensions/context_extensions.dart';
-import 'package:portfolio/core/widgets/section_wrapper.dart';
-import 'package:portfolio/features/about/presentation/about_section.dart';
-import 'package:portfolio/features/contact/presentation/contact_section.dart';
-import 'package:portfolio/features/experience/presentation/experience_section.dart';
-import 'package:portfolio/features/hero/presentation/hero_section.dart';
-import 'package:portfolio/features/projects/presentation/projects_section.dart';
-import 'package:portfolio/features/skills/presentation/skills_section.dart';
+import 'package:portfolio/app/widgets/nav_bar.dart';
+import 'package:portfolio/app/widgets/section_list.dart';
 import 'package:portfolio/features/terminal/bloc/terminal_bloc.dart';
 import 'package:portfolio/features/terminal/bloc/terminal_event.dart';
 import 'package:portfolio/features/terminal/bloc/terminal_state.dart';
@@ -107,202 +95,18 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
                     CustomScrollView(
                       controller: navCubit.scrollController,
                       slivers: [
-                        const _NavBar(),
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              SectionWrapper(
-                                sectionKey: keys[0],
-                                onVisible: () => navCubit.setActive(0),
-                                child: const HeroSection(),
-                              ),
-                              SectionWrapper(
-                                sectionKey: keys[1],
-                                onVisible: () => navCubit.setActive(1),
-                                child: const AboutSection(),
-                              ),
-                              SectionWrapper(
-                                sectionKey: keys[2],
-                                onVisible: () => navCubit.setActive(2),
-                                child: const ProjectsSection(),
-                              ),
-                              SectionWrapper(
-                                sectionKey: keys[3],
-                                onVisible: () => navCubit.setActive(3),
-                                child: const ExperienceSection(),
-                              ),
-                              SectionWrapper(
-                                sectionKey: keys[4],
-                                onVisible: () => navCubit.setActive(4),
-                                child: const SkillsSection(),
-                              ),
-                              SectionWrapper(
-                                sectionKey: keys[5],
-                                onVisible: () => navCubit.setActive(5),
-                                child: const ContactSection(),
-                              ),
-                            ],
-                          ),
-                        ),
+                        const NavBar(),
+                        SectionList(navCubit: navCubit, keys: keys),
                       ],
                     ),
-                  const TerminalOverlay(),
-                ],
+                    const TerminalOverlay(),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
-}
-
-class _NavBar extends StatelessWidget {
-  const _NavBar();
-
-  @override
-  Widget build(BuildContext context) {
-    final isDesktop = context.isDesktop;
-    final accent = context.accent.accent;
-
-    return SliverAppBar(
-      floating: true,
-      snap: true,
-      backgroundColor: AppColors.surfaceTertiary.withValues(alpha: 0.9),
-      toolbarHeight: 64,
-      title: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () => context.read<NavigationCubit>().scrollTo(0),
-          child: Text(
-            'AE',
-            style: AppTextStyles.h3(context).copyWith(color: accent),
-          ),
-        ),
+          );
+        },
       ),
-      actions: [
-        if (isDesktop)
-          BlocBuilder<NavigationCubit, NavigationState>(
-            builder: (context, navState) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(AppStrings.navSections.length, (i) {
-                  final isActive = navState.activeIndex == i;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: TextButton(
-                        onPressed: () =>
-                            context.read<NavigationCubit>().scrollTo(i),
-                        child: Text(
-                          AppStrings.navSections[i],
-                          style: AppTextStyles.caption(context).copyWith(
-                            color: isActive ? accent : AppColors.textSecondary,
-                            fontWeight: isActive
-                                ? FontWeight.w600
-                                : FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              );
-            },
-          ),
-        // Accent toggle button
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: BlocBuilder<ThemeCubit, AppThemeMode>(
-            builder: (context, mode) {
-              final icon = switch (mode) {
-                AppThemeMode.dark => Icons.dark_mode_outlined,
-                AppThemeMode.uvGreen => Icons.bolt,
-                AppThemeMode.uvViolet => Icons.auto_awesome,
-              };
-              final tooltip = switch (mode) {
-                AppThemeMode.dark => 'Dark Mode',
-                AppThemeMode.uvGreen => 'UV Green',
-                AppThemeMode.uvViolet => 'UV Violet',
-              };
-              return Semantics(
-                button: true,
-                label: 'Toggle theme: $tooltip',
-                child: IconButton(
-                  onPressed: () => context.read<ThemeCubit>().toggleAccent(),
-                  icon: Icon(icon, color: accent),
-                  tooltip: tooltip,
-                ),
-              );
-            },
-          ),
-        ),
-        // Mobile hamburger
-        if (!isDesktop)
-          Builder(
-            builder: (ctx) {
-              return IconButton(
-                onPressed: () => _showMobileNav(ctx),
-                icon: Icon(Icons.menu, color: accent),
-                tooltip: 'Navigation menu',
-              );
-            },
-          ),
-      ],
     );
   }
-
-  void _showMobileNav(BuildContext context) {
-    final accent = context.accent.accent;
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surfaceTertiary,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(AppStrings.navSections.length, (i) {
-              return ListTile(
-                title: Text(
-                  AppStrings.navSections[i],
-                  style: AppTextStyles.body(context).copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                leading: Icon(
-                  _sectionIcon(i),
-                  color: accent,
-                ),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  context.read<NavigationCubit>().scrollTo(i);
-                },
-              );
-            }),
-          ),
-        );
-      },
-    );
-  }
-
-  static IconData _sectionIcon(int index) {
-    return switch (index) {
-      0 => Icons.home_outlined,
-      1 => Icons.person_outline,
-      2 => Icons.code_outlined,
-      3 => Icons.work_history_outlined,
-      4 => Icons.psychology_outlined,
-      5 => Icons.mail_outlined,
-      _ => Icons.circle_outlined,
-    };
-  }
 }
-
-
-
-

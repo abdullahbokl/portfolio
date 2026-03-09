@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../app/theme/app_theme.dart';
+import '../../app/theme/accent_theme.dart';
+
 import '../constants/app_breakpoints.dart';
 
 extension BuildContextX on BuildContext {
@@ -24,4 +25,3 @@ extension BuildContextX on BuildContext {
 
   bool get reduceMotion => MediaQuery.disableAnimationsOf(this);
 }
-

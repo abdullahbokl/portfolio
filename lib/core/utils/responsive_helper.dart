@@ -11,11 +11,12 @@ class ResponsiveBuilder extends StatelessWidget {
     super.key,
   });
 
-  final Widget Function(BuildContext context, BoxConstraints constraints) mobile;
+  final Widget Function(BuildContext context, BoxConstraints constraints)
+  mobile;
   final Widget Function(BuildContext context, BoxConstraints constraints)?
-      tablet;
+  tablet;
   final Widget Function(BuildContext context, BoxConstraints constraints)?
-      desktop;
+  desktop;
 
   @override
   Widget build(BuildContext context) {
@@ -34,4 +35,3 @@ class ResponsiveBuilder extends StatelessWidget {
     );
   }
 }
-

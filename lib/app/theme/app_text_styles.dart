@@ -8,8 +8,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 56.0
         : w > AppBreakpoints.mobile
-            ? 44.0
-            : 32.0;
+        ? 44.0
+        : 32.0;
     return GoogleFonts.spaceGrotesk(
       fontSize: size,
       fontWeight: FontWeight.w700,
@@ -22,8 +22,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 48.0
         : w > AppBreakpoints.mobile
-            ? 36.0
-            : 28.0;
+        ? 36.0
+        : 28.0;
     return GoogleFonts.spaceGrotesk(
       fontSize: size,
       fontWeight: FontWeight.w700,
@@ -36,8 +36,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 36.0
         : w > AppBreakpoints.mobile
-            ? 28.0
-            : 24.0;
+        ? 28.0
+        : 24.0;
     return GoogleFonts.spaceGrotesk(
       fontSize: size,
       fontWeight: FontWeight.w600,
@@ -50,8 +50,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 24.0
         : w > AppBreakpoints.mobile
-            ? 22.0
-            : 20.0;
+        ? 22.0
+        : 20.0;
     return GoogleFonts.spaceGrotesk(
       fontSize: size,
       fontWeight: FontWeight.w600,
@@ -84,8 +84,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 14.0
         : w > AppBreakpoints.mobile
-            ? 13.0
-            : 12.0;
+        ? 13.0
+        : 12.0;
     return GoogleFonts.inter(
       fontSize: size,
       fontWeight: FontWeight.w400,
@@ -98,8 +98,8 @@ abstract final class AppTextStyles {
     final size = w > AppBreakpoints.tablet
         ? 14.0
         : w > AppBreakpoints.mobile
-            ? 13.0
-            : 12.0;
+        ? 13.0
+        : 12.0;
     return GoogleFonts.jetBrainsMono(
       fontSize: size,
       fontWeight: FontWeight.w400,
@@ -107,5 +107,3 @@ abstract final class AppTextStyles {
     );
   }
 }
-
-

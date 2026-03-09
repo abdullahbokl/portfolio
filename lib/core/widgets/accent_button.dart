@@ -66,8 +66,9 @@ class _AccentButtonState extends State<AccentButton> {
         child: OutlinedButton(
           onPressed: widget.onPressed,
           style: OutlinedButton.styleFrom(
-            backgroundColor:
-                _hovered ? accent.withValues(alpha: 0.1) : Colors.transparent,
+            backgroundColor: _hovered
+                ? accent.withValues(alpha: 0.1)
+                : Colors.transparent,
           ),
           child: _buildContent(accent),
         ),
@@ -89,4 +90,3 @@ class _AccentButtonState extends State<AccentButton> {
     return Text(widget.label);
   }
 }
-

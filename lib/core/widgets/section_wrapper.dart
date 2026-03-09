@@ -32,13 +32,13 @@ class _SectionWrapperState extends State<SectionWrapper> {
     final horizontalPadding = isDesktop
         ? 24.0
         : isTablet
-            ? 20.0
-            : 16.0;
+        ? 20.0
+        : 16.0;
     final verticalPadding = isDesktop
         ? 80.0
         : isTablet
-            ? 64.0
-            : 48.0;
+        ? 64.0
+        : 48.0;
 
     final reduceMotion = context.reduceMotion;
 
@@ -82,4 +82,3 @@ class _SectionWrapperState extends State<SectionWrapper> {
     );
   }
 }
-

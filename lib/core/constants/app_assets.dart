@@ -4,4 +4,3 @@ abstract final class AppAssets {
   static const String resumeUrl =
       'https://drive.google.com/file/d/1hMI0vm7kY17sIddMs6B_cB3W7Z5k_FwA/view';
 }
-

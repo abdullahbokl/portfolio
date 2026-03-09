@@ -30,4 +30,3 @@ abstract final class AppColors {
   static const terminalGreen = Color(0xFF00FF41);
   static const terminalBg = Color(0xFF0A0A0A);
 }
-

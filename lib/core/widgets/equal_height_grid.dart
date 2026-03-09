@@ -22,8 +22,9 @@ class EqualHeightGrid extends StatelessWidget {
     final rows = <List<Widget>>[];
 
     for (int i = 0; i < children.length; i += columns) {
-      final end =
-          (i + columns > children.length) ? children.length : i + columns;
+      final end = (i + columns > children.length)
+          ? children.length
+          : i + columns;
       rows.add(children.sublist(i, end));
     }
 
@@ -53,4 +54,3 @@ class EqualHeightGrid extends StatelessWidget {
     );
   }
 }
-
