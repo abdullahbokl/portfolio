@@ -25,4 +25,3 @@ class ProjectModel {
   final String? webUrl;
   final String? githubUrl;
 }
-

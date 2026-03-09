@@ -19,18 +19,14 @@ class ArchitectureBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceTertiary,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: accent.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: accent.withValues(alpha: 0.2)),
       ),
       child: Text(
         label,
-        style: AppTextStyles.caption(context).copyWith(
-          color: accent.withValues(alpha: 0.9),
-          fontSize: 11,
-        ),
+        style: AppTextStyles.caption(
+          context,
+        ).copyWith(color: accent.withValues(alpha: 0.9), fontSize: 11),
       ),
     );
   }
 }
-
