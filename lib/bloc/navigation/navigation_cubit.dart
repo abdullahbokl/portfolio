@@ -5,12 +5,12 @@ import 'navigation_state.dart';
 
 class NavigationCubit extends Cubit<NavigationState> {
   NavigationCubit()
-      : super(
-          NavigationState(
-            activeIndex: 0,
-            sectionKeys: List.generate(6, (_) => GlobalKey()),
-          ),
-        );
+    : super(
+        NavigationState(
+          activeIndex: 0,
+          sectionKeys: List.generate(6, (_) => GlobalKey()),
+        ),
+      );
 
   final ScrollController scrollController = ScrollController();
 
@@ -39,4 +39,3 @@ class NavigationCubit extends Cubit<NavigationState> {
     return super.close();
   }
 }
-

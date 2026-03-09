@@ -18,4 +18,3 @@ class ThemeCubit extends Cubit<AppThemeMode> {
 
   void setMode(AppThemeMode mode) => emit(mode);
 }
-

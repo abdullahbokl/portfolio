@@ -59,4 +59,3 @@ class AboutSection extends StatelessWidget {
     );
   }
 }
-

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NavigationState {
-  const NavigationState({
-    required this.activeIndex,
-    required this.sectionKeys,
-  });
+  const NavigationState({required this.activeIndex, required this.sectionKeys});
 
   final int activeIndex;
   final List<GlobalKey> sectionKeys;
@@ -16,4 +13,3 @@ class NavigationState {
     );
   }
 }
-
