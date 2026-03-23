@@ -47,7 +47,6 @@ abstract final class AppStrings {
   static const contactTitle = "Let's Build Something";
   static const contactSubtitle =
       'Open to senior Flutter roles and high-impact engineering challenges.';
-  static const contactBuiltWith = 'Built with Flutter & Bloc';
   static const contactCopyright = '© 2025 Abdullah Khaled Elbokl';
 
   // ── Links ─────────────────────────────────────

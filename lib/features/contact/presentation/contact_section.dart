@@ -66,13 +66,6 @@ class ContactSection extends StatelessWidget {
         Divider(color: AppColors.surfaceQuaternary, height: 1),
         const SizedBox(height: 24),
         Text(
-          AppStrings.contactBuiltWith,
-          style: AppTextStyles.caption(
-            context,
-          ).copyWith(color: AppColors.textSecondary),
-        ),
-        const SizedBox(height: 4),
-        Text(
           AppStrings.contactCopyright,
           style: AppTextStyles.caption(
             context,

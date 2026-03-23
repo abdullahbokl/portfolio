@@ -4,6 +4,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../domain/project_model.dart';
 import 'link_button.dart';
+import 'project_image_carousel.dart';
 
 class ProjectCardExpanded extends StatelessWidget {
   const ProjectCardExpanded({
@@ -22,6 +23,10 @@ class ProjectCardExpanded extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (project.imageUrls.isNotEmpty) ...[
+            ProjectImageCarousel(images: project.imageUrls, accent: accent),
+            const SizedBox(height: 16),
+          ],
           Text(
             project.description,
             style: AppTextStyles.body(

@@ -12,6 +12,7 @@ abstract final class ProjectData {
       techTags: ProjectStrings.bokloTech,
       architectureHighlights: ProjectStrings.bokloHighlights,
       icon: Icons.account_balance_wallet,
+      imageUrls: ProjectStrings.bokloImages,
       githubUrl: ProjectStrings.bokloGithubUrl,
     ),
     ProjectModel(
@@ -21,6 +22,7 @@ abstract final class ProjectData {
       techTags: ProjectStrings.crmTech,
       architectureHighlights: ProjectStrings.crmHighlights,
       icon: Icons.business_center,
+      imageUrls: ProjectStrings.crmImages,
       liveUrl: ProjectStrings.crmPlayStoreUrl,
       appleStoreUrl: ProjectStrings.crmAppleStoreUrl,
     ),
@@ -31,6 +33,7 @@ abstract final class ProjectData {
       techTags: ProjectStrings.kiranaTech,
       architectureHighlights: ProjectStrings.kiranaHighlights,
       icon: Icons.inventory,
+      imageUrls: ProjectStrings.kiranaImages,
       liveUrl: ProjectStrings.kiranaPlayStoreUrl,
       appleStoreUrl: ProjectStrings.kiranaAppleStoreUrl,
       webUrl: ProjectStrings.kiranaWebUrl,
@@ -42,6 +45,7 @@ abstract final class ProjectData {
       techTags: ProjectStrings.jobHubTech,
       architectureHighlights: ProjectStrings.jobHubHighlights,
       icon: Icons.work,
+      imageUrls: ProjectStrings.jobHubImages,
       githubUrl: ProjectStrings.jobHubGithubUrl,
     ),
     ProjectModel(

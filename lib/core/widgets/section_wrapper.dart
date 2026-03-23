@@ -65,15 +65,23 @@ class _SectionWrapperState extends State<SectionWrapper> {
             child: AnimatedOpacity(
               duration: reduceMotion
                   ? Duration.zero
-                  : const Duration(milliseconds: 600),
+                  : const Duration(milliseconds: 800),
+              curve: Curves.easeOutCubic,
               opacity: _hasAppeared ? 1.0 : 0.0,
-              child: AnimatedSlide(
+              child: AnimatedScale(
                 duration: reduceMotion
                     ? Duration.zero
-                    : const Duration(milliseconds: 600),
+                    : const Duration(milliseconds: 800),
                 curve: Curves.easeOutCubic,
-                offset: _hasAppeared ? Offset.zero : const Offset(0, 0.05),
-                child: widget.child,
+                scale: _hasAppeared ? 1.0 : 0.95,
+                child: AnimatedSlide(
+                  duration: reduceMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 800),
+                  curve: Curves.easeOutCubic,
+                  offset: _hasAppeared ? Offset.zero : const Offset(0, 0.05),
+                  child: widget.child,
+                ),
               ),
             ),
           ),
