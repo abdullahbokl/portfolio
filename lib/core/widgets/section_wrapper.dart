@@ -27,22 +27,29 @@ class _SectionWrapperState extends State<SectionWrapper>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-  bool _hasAppeared = false;
+  late Animation<Offset> _slideAnimation;
+  bool _alreadyAppeared = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 300),
     );
+    
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOutCubic,
     );
 
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.05), // Subtle 5% slide up
+      end: Offset.zero,
+    ).animate(_animation);
+
     if (widget.isInitial) {
-      _hasAppeared = true;
+      _alreadyAppeared = true;
       _controller.value = 1.0;
     }
   }
@@ -54,8 +61,8 @@ class _SectionWrapperState extends State<SectionWrapper>
   }
 
   void _onAppear() {
-    if (_hasAppeared) return;
-    setState(() => _hasAppeared = true);
+    if (_alreadyAppeared) return;
+    _alreadyAppeared = true;
     _controller.forward();
   }
 
@@ -78,34 +85,30 @@ class _SectionWrapperState extends State<SectionWrapper>
         if (info.visibleFraction > 0.5) {
           widget.onVisible?.call();
         }
-        // Animate in earlier (0.1 threshold)
-        if (info.visibleFraction > 0.1) {
+        // Animate in as soon as it starts appearing (0.03 threshold)
+        if (info.visibleFraction > 0.05) {
           _onAppear();
         }
       },
-      child: Container(
-        key: widget.sectionKey,
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(
-          horizontal: horizontalPadding,
-          vertical: verticalPadding,
-        ),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1200),
-            child: FadeTransition(
-              opacity: _animation,
-              child: ScaleTransition(
-                scale: Tween<double>(begin: 0.96, end: 1.0).animate(_animation),
-                child: AnimatedBuilder(
-                  animation: _animation,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 30 * (1 - _animation.value)),
-                      child: child,
-                    );
-                  },
-                  child: widget.child,
+      child: RepaintBoundary(
+        child: Container(
+          key: widget.sectionKey,
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: FadeTransition(
+                opacity: _animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.98, end: 1.0).animate(_animation),
+                  child: SlideTransition(
+                    position: _slideAnimation,
+                    child: widget.child,
+                  ),
                 ),
               ),
             ),
