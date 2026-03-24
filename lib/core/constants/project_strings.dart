@@ -57,13 +57,13 @@ abstract final class ProjectStrings {
     'Shorebird',
   ];
   static const crmImages = [
-    'https://media.licdn.com/dms/image/v2/D4D2DAQHB97t1mZipWA/profile-treasury-image-shrink_800_800/B4DZzVC8yqH4AY-/0/1773100847132?e=1774908000&v=beta&t=UmZt1aMY4JKQ6lNclYM-JWJosWlGzqPHSdSMYbRGf0g',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQFY4nk6pKhPqg/profile-treasury-image-shrink_800_800/B4DZzVC8ypHEAY-/0/1773100847288?e=1774908000&v=beta&t=IcxyRfXROjh79UPBJsLhG-gno0j8SocBGZiY55kOS3k',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQHiy1X-UbT0kg/profile-treasury-image-shrink_800_800/B4DZzVC8ypJoAY-/0/1773100847326?e=1774908000&v=beta&t=Lz8q2JJfmJAbMxaRfyjCI_smLOfY-KPIYMkbHRLaLWY',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQEN63D5kptnoQ/profile-treasury-image-shrink_800_800/B4DZzVC8ypKoAc-/0/1773100847139?e=1774908000&v=beta&t=sHZ4c6Ms1YbhKsydYal1S07ar8w6KJEVViapFXn9UOk',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQFPUtJS9ZtIMQ/profile-treasury-image-shrink_800_800/B4DZzVC8yoIAAc-/0/1773100847154?e=1774908000&v=beta&t=B9AlE7xyOauqfrHiIY904RDowlWSe0GSB3jniiFX9wk',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQEY0HBzYOhC4w/profile-treasury-image-shrink_800_800/B4DZzVC8yoHwAc-/0/1773100847428?e=1774908000&v=beta&t=vi9m52eoLSaZ-dneYl120Qb3u727opeH9Rd_zDVOApc',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQERHydkHwT4uQ/profile-treasury-image-shrink_800_800/B4DZzVC8y0KYAY-/0/1773100846669?e=1774908000&v=beta&t=g1enejX8qrDGKiagFexADSYB6UbeZRwt7tkcmPObaxE',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S1.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S2.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S3.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S4.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S5.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S6.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S7.png',
   ];
   static const crmPlayStoreUrl =
       'https://play.google.com/store/apps/details?id=com.mpluse.crmsmart';
@@ -90,12 +90,12 @@ abstract final class ProjectStrings {
     'Google Maps',
   ];
   static const kiranaImages = [
-    'https://media.licdn.com/dms/image/v2/D4D2DAQE7XBIqNol4Zw/profile-treasury-image-shrink_480_480/B4DZzVBWT6JIAM-/0/1773100427576?e=1774908000&v=beta&t=jW28MLyKwkucu3YijDmm7XfEy0Ljt10IBpfiKyfm_NY',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQGrDmceUpMC_w/profile-treasury-image-shrink_800_800/B4DZzVBWT6JIBM-/0/1773100428369?e=1774908000&v=beta&t=rvCIHHDmGrZqv-ifvOn3De5ynYcw9O8L1TmNnibAT5A',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQFa1FmiGMNRXg/profile-treasury-image-shrink_800_800/B4DZzVBWT9HYAY-/0/1773100428370?e=1774908000&v=beta&t=hvwcfO-M7udZK9NPPDgAps9K9HsNFBQijaXsXMLRDnw',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQEF_bdMFZDvmA/profile-treasury-image-shrink_800_800/B4DZzVBWT8HIAY-/0/1773100428246?e=1774908000&v=beta&t=DxZSGjDDEYLigRQb3Pbm59PLcr-fF-auOhW9efRmxzY',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQHMguRY9BAb-Q/profile-treasury-image-shrink_800_800/B4DZzVBWT9GwAY-/0/1773100428419?e=1774908000&v=beta&t=eV4F_319N5KwOkKFQgPL_J8wkoxI0iiB2-qkiQq2iKQ',
-    'https://media.licdn.com/dms/image/v2/D4D2DAQHRCyKEjwfFlQ/profile-treasury-image-shrink_800_800/B4DZzVBWT_I4AY-/0/1773100428055?e=1774908000&v=beta&t=8pVz6neLKPTPglxoPWvbU1OrSpqSgsQeC4rSMAYCE80',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B2.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B3.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B4.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B5.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B6.png',
+    'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B7.png',
   ];
   static const kiranaPlayStoreUrl =
       'https://play.google.com/store/apps/details?id=com.apnidukan.my_app';
