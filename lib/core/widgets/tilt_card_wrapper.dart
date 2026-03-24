@@ -55,17 +55,11 @@ class _TiltCardWrapperState extends State<TiltCardWrapper> {
       onHover: _onHover,
       onExit: _onExit,
       cursor: SystemMouseCursors.click,
-      child: TweenAnimationBuilder<Matrix4>(
-        tween: Matrix4Tween(begin: Matrix4.identity(), end: transform),
+      child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
-        builder: (context, matrix, child) {
-          return Transform(
-            transform: matrix,
-            alignment: FractionalOffset.center,
-            child: child,
-          );
-        },
+        transform: transform,
+        transformAlignment: Alignment.center,
         child: widget.child,
       ),
     );

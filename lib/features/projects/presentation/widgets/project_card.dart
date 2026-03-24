@@ -61,27 +61,19 @@ class _ProjectCardState extends State<ProjectCard> {
                           ]
                         : [],
                   ),
-                ),
-              ),
-              // Glass shimmer overlay on hover
-              if (_hovered)
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.white.withValues(alpha: 0.05),
-                            Colors.transparent,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                  foregroundDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withValues(alpha: _hovered ? 0.05 : 0.0),
+                        Colors.transparent,
+                      ],
                     ),
                   ),
                 ),
+              ),
               // Content (drives actual size)
               Padding(
                 padding: const EdgeInsets.all(20),

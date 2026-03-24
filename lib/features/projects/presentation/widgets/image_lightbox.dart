@@ -52,14 +52,22 @@ class _ImageLightboxState extends State<ImageLightbox> {
   late int _currentIndex;
 
   // One TransformationController per page so zooms are independent
-  late final List<TransformationController> _transformControllers;
+  // Store controllers lazily to save memory
+  final Map<int, TransformationController> _transformControllers = {};
+
+  TransformationController _getController(int index) {
+    return _transformControllers.putIfAbsent(
+      index,
+      () => TransformationController(),
+    );
+  }
 
   static const double _minScale = 1.0;
   static const double _maxScale = 5.0;
   static const double _zoomStep = 0.75;
 
   double get _currentScale {
-    final m = _transformControllers[_currentIndex].value;
+    final m = _getController(_currentIndex).value;
     return m.getMaxScaleOnAxis();
   }
 
@@ -68,17 +76,13 @@ class _ImageLightboxState extends State<ImageLightbox> {
     super.initState();
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: widget.initialIndex);
-    _transformControllers = List.generate(
-      widget.images.length,
-      (_) => TransformationController(),
-    );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    for (final c in _transformControllers) {
+    for (final c in _transformControllers.values) {
       c.dispose();
     }
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -90,13 +94,13 @@ class _ImageLightboxState extends State<ImageLightbox> {
   void _zoomIn() => _animateScale(_currentScale + _zoomStep);
   void _zoomOut() => _animateScale(_currentScale - _zoomStep);
   void _resetZoom() {
-    _transformControllers[_currentIndex].value = Matrix4.identity();
+    _getController(_currentIndex).value = Matrix4.identity();
     setState(() {});
   }
 
   void _animateScale(double targetScale) {
     final clamped = targetScale.clamp(_minScale, _maxScale);
-    final controller = _transformControllers[_currentIndex];
+    final controller = _getController(_currentIndex);
     final size = MediaQuery.of(context).size;
     // Scale around the viewport center so image stays centered
     final cx = size.width / 2;
@@ -163,7 +167,7 @@ class _ImageLightboxState extends State<ImageLightbox> {
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     return InteractiveViewer(
-                      transformationController: _transformControllers[index],
+                      transformationController: _getController(index),
                       minScale: _minScale,
                       maxScale: _maxScale,
                       // Constrained boundary — content stays on-screen

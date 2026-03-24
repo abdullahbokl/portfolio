@@ -23,6 +23,7 @@ class SectionList extends StatelessWidget {
           SectionWrapper(
             sectionKey: keys[0],
             onVisible: () => navCubit.setActive(0),
+            isInitial: true,
             child: const HeroSection(),
           ),
           SectionWrapper(

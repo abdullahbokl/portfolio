@@ -16,8 +16,8 @@ class TypingText extends StatefulWidget {
 }
 
 class _TypingTextState extends State<TypingText> {
-  String _displayedText = '';
-  bool _cursorVisible = true;
+  late final ValueNotifier<String> _textNotifier;
+  late final ValueNotifier<bool> _cursorNotifier;
   int _phraseIndex = 0;
   bool _isDeleting = false;
   Timer? _typingTimer;
@@ -26,25 +26,23 @@ class _TypingTextState extends State<TypingText> {
   @override
   void initState() {
     super.initState();
+    _textNotifier = ValueNotifier('');
+    _cursorNotifier = ValueNotifier(true);
     _cursorTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
-      if (mounted) setState(() => _cursorVisible = !_cursorVisible);
+      _cursorNotifier.value = !_cursorNotifier.value;
     });
     _startTyping();
   }
 
   void _startTyping() {
     final phrase = widget.phrases[_phraseIndex];
+    final currentText = _textNotifier.value;
 
     if (_isDeleting) {
-      if (_displayedText.isNotEmpty) {
+      if (currentText.isNotEmpty) {
         _typingTimer = Timer(const Duration(milliseconds: 30), () {
           if (!mounted) return;
-          setState(() {
-            _displayedText = _displayedText.substring(
-              0,
-              _displayedText.length - 1,
-            );
-          });
+          _textNotifier.value = currentText.substring(0, currentText.length - 1);
           _startTyping();
         });
       } else {
@@ -53,12 +51,10 @@ class _TypingTextState extends State<TypingText> {
         _typingTimer = Timer(const Duration(milliseconds: 500), _startTyping);
       }
     } else {
-      if (_displayedText.length < phrase.length) {
+      if (currentText.length < phrase.length) {
         _typingTimer = Timer(const Duration(milliseconds: 50), () {
           if (!mounted) return;
-          setState(() {
-            _displayedText = phrase.substring(0, _displayedText.length + 1);
-          });
+          _textNotifier.value = phrase.substring(0, currentText.length + 1);
           _startTyping();
         });
       } else {
@@ -75,6 +71,8 @@ class _TypingTextState extends State<TypingText> {
   void dispose() {
     _typingTimer?.cancel();
     _cursorTimer?.cancel();
+    _textNotifier.dispose();
+    _cursorNotifier.dispose();
     super.dispose();
   }
 
@@ -97,18 +95,28 @@ class _TypingTextState extends State<TypingText> {
 
     return Semantics(
       label: widget.phrases.join(', '),
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: _displayedText),
-            TextSpan(
-              text: _cursorVisible ? '|' : ' ',
-              style: style.copyWith(fontWeight: FontWeight.w300),
-            ),
-          ],
-        ),
-        style: style,
-        textAlign: TextAlign.center,
+      child: ValueListenableBuilder<String>(
+        valueListenable: _textNotifier,
+        builder: (context, text, _) {
+          return ValueListenableBuilder<bool>(
+            valueListenable: _cursorNotifier,
+            builder: (context, cursorVisible, _) {
+              return Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: text),
+                    TextSpan(
+                      text: cursorVisible ? '|' : ' ',
+                      style: style.copyWith(fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                ),
+                style: style,
+                textAlign: TextAlign.center,
+              );
+            },
+          );
+        },
       ),
     );
   }

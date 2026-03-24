@@ -10,37 +10,67 @@ class SectionWrapper extends StatefulWidget {
     required this.sectionKey,
     required this.child,
     this.onVisible,
+    this.isInitial = false,
     super.key,
   });
 
   final GlobalKey sectionKey;
   final Widget child;
   final VoidCallback? onVisible;
+  final bool isInitial;
 
   @override
   State<SectionWrapper> createState() => _SectionWrapperState();
 }
 
-class _SectionWrapperState extends State<SectionWrapper> {
+class _SectionWrapperState extends State<SectionWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
   bool _hasAppeared = false;
 
   @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    );
+
+    if (widget.isInitial) {
+      _hasAppeared = true;
+      _controller.value = 1.0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onAppear() {
+    if (_hasAppeared) return;
+    setState(() => _hasAppeared = true);
+    _controller.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isDesktop = context.isDesktop;
-    final isTablet = context.isTablet;
-
-    final horizontalPadding = isDesktop
+    final horizontalPadding = context.isDesktop
         ? 24.0
-        : isTablet
-        ? 20.0
-        : 16.0;
-    final verticalPadding = isDesktop
+        : context.isTablet
+            ? 20.0
+            : 16.0;
+    final verticalPadding = context.isDesktop
         ? 80.0
-        : isTablet
-        ? 64.0
-        : 48.0;
-
-    final reduceMotion = context.reduceMotion;
+        : context.isTablet
+            ? 64.0
+            : 48.0;
 
     return VisibilityDetector(
       key: Key('section-${widget.sectionKey.hashCode}'),
@@ -48,8 +78,9 @@ class _SectionWrapperState extends State<SectionWrapper> {
         if (info.visibleFraction > 0.5) {
           widget.onVisible?.call();
         }
-        if (!_hasAppeared && info.visibleFraction > 0.2) {
-          setState(() => _hasAppeared = true);
+        // Animate in earlier (0.1 threshold)
+        if (info.visibleFraction > 0.1) {
+          _onAppear();
         }
       },
       child: Container(
@@ -62,24 +93,18 @@ class _SectionWrapperState extends State<SectionWrapper> {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
-            child: AnimatedOpacity(
-              duration: reduceMotion
-                  ? Duration.zero
-                  : const Duration(milliseconds: 800),
-              curve: Curves.easeOutCubic,
-              opacity: _hasAppeared ? 1.0 : 0.0,
-              child: AnimatedScale(
-                duration: reduceMotion
-                    ? Duration.zero
-                    : const Duration(milliseconds: 800),
-                curve: Curves.easeOutCubic,
-                scale: _hasAppeared ? 1.0 : 0.95,
-                child: AnimatedSlide(
-                  duration: reduceMotion
-                      ? Duration.zero
-                      : const Duration(milliseconds: 800),
-                  curve: Curves.easeOutCubic,
-                  offset: _hasAppeared ? Offset.zero : const Offset(0, 0.05),
+            child: FadeTransition(
+              opacity: _animation,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.96, end: 1.0).animate(_animation),
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, 30 * (1 - _animation.value)),
+                      child: child,
+                    );
+                  },
                   child: widget.child,
                 ),
               ),

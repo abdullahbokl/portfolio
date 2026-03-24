@@ -72,33 +72,16 @@ class _ParticleBackgroundState extends State<ParticleBackground>
         _initParticles(size, context.isMobile, context.isTablet);
 
         return RepaintBoundary(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              _updateParticles(size);
-              return CustomPaint(
-                size: size,
-                painter: ParticlePainter(
-                  particles: _particles,
-                  accentColor: context.accent.accent,
-                ),
-              );
-            },
+          child: CustomPaint(
+            size: size,
+            painter: ParticlePainter(
+              particles: _particles,
+              accentColor: context.accent.accent,
+              repaint: _controller,
+            ),
           ),
         );
       },
     );
-  }
-
-  void _updateParticles(Size size) {
-    for (final p in _particles) {
-      p.x += p.dx;
-      p.y += p.dy;
-
-      if (p.x < 0) p.x = size.width;
-      if (p.x > size.width) p.x = 0;
-      if (p.y < 0) p.y = size.height;
-      if (p.y > size.height) p.y = 0;
-    }
   }
 }

@@ -73,7 +73,7 @@ class _AnimatedCounterState extends State<AnimatedCounter>
             '${widget.prefix}${widget.targetValue}${widget.suffix} ${widget.label}',
         child: AnimatedBuilder(
           animation: _animation,
-          builder: (context, _) {
+          builder: (context, child) {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -81,19 +81,25 @@ class _AnimatedCounterState extends State<AnimatedCounter>
                   '${widget.prefix}${_animation.value}${widget.suffix}',
                   style: AppTextStyles.h2(context).copyWith(color: accent),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.label,
-                  style: AppTextStyles.caption(context).copyWith(
-                    color: context.theme.colorScheme.onSurface.withValues(
-                      alpha: 0.6,
-                    ),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                if (child != null) child,
               ],
             );
           },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 4),
+              Text(
+                widget.label,
+                style: AppTextStyles.caption(context).copyWith(
+                  color: context.theme.colorScheme.onSurface.withValues(
+                    alpha: 0.6,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

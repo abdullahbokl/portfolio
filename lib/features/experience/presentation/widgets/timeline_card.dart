@@ -20,22 +20,25 @@ class TimelineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: EdgeInsets.all(isMobile ? 16 : 20),
-      decoration: BoxDecoration(
-        color: isHovered
-            ? AppColors.surfaceTertiary
-            : AppColors.surfaceSecondary,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isHovered ? accent : AppColors.surfaceQuaternary,
+    final shadows = isHovered
+        ? [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 20)]
+        : const <BoxShadow>[];
+
+    return RepaintBoundary(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: EdgeInsets.all(isMobile ? 16 : 20),
+        decoration: BoxDecoration(
+          color: isHovered
+              ? AppColors.surfaceTertiary
+              : AppColors.surfaceSecondary,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isHovered ? accent : AppColors.surfaceQuaternary,
+          ),
+          boxShadow: shadows,
         ),
-        boxShadow: isHovered
-            ? [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 20)]
-            : [],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -104,6 +107,7 @@ class TimelineCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

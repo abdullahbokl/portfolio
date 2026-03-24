@@ -48,6 +48,15 @@ class _SkillCategoryCardState extends State<SkillCategoryCard>
       _controller.value = 1.0;
     }
 
+    final shadows = _hovered
+        ? [
+            BoxShadow(
+              color: accent.withValues(alpha: 0.12),
+              blurRadius: 24,
+            ),
+          ]
+        : const <BoxShadow>[];
+
     return VisibilityDetector(
       key: Key('skill-${widget.category.title}'),
       onVisibilityChanged: (info) {
@@ -60,50 +69,45 @@ class _SkillCategoryCardState extends State<SkillCategoryCard>
         cursor: SystemMouseCursors.basic,
         onEnter: (_) => setState(() => _hovered = true),
         onExit: (_) => setState(() => _hovered = false),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: _hovered
-                ? AppColors.surfaceTertiary
-                : AppColors.surfaceSecondary,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _hovered ? accent : AppColors.surfaceQuaternary,
+        child: RepaintBoundary(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: _hovered
+                  ? AppColors.surfaceTertiary
+                  : AppColors.surfaceSecondary,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _hovered ? accent : AppColors.surfaceQuaternary,
+              ),
+              boxShadow: shadows,
             ),
-            boxShadow: _hovered
-                ? [
-                    BoxShadow(
-                      color: accent.withValues(alpha: 0.12),
-                      blurRadius: 24,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(widget.category.icon, color: accent, size: 24),
+                    const SizedBox(width: 10),
+                    Text(
+                      widget.category.title,
+                      style: AppTextStyles.h3(
+                        context,
+                      ).copyWith(color: AppColors.textPrimary),
                     ),
-                  ]
-                : [],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(widget.category.icon, color: accent, size: 24),
-                  const SizedBox(width: 10),
-                  Text(
-                    widget.category.title,
-                    style: AppTextStyles.h3(
-                      context,
-                    ).copyWith(color: AppColors.textPrimary),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              ...widget.category.skills.map(
-                (skill) => SkillRow(
-                  skill: skill,
-                  animation: _controller,
-                  accent: accent,
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                ...widget.category.skills.map(
+                  (skill) => SkillRow(
+                    skill: skill,
+                    animation: _controller,
+                    accent: accent,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

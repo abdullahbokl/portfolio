@@ -61,6 +61,7 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
+                        memCacheWidth: 800, // Limit decode resolution to save memory
                         placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: AppColors.surfaceTertiary,
                           highlightColor: AppColors.surfaceQuaternary,
