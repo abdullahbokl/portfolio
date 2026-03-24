@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
-import '../../../../core/extensions/context_extensions.dart';
 
 /// Small chip badge for tech tags on project cards.
 class ArchitectureBadge extends StatelessWidget {
@@ -12,20 +11,22 @@ class ArchitectureBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.accent.accent;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.surfaceTertiary,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: accent.withValues(alpha: 0.2)),
+        color: AppColors.pillBg,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
         style: AppTextStyles.caption(
           context,
-        ).copyWith(color: accent.withValues(alpha: 0.9), fontSize: 11),
+        ).copyWith(
+          color: AppColors.limeGreen,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

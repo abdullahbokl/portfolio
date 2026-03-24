@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
@@ -37,22 +38,19 @@ class ProjectDetailSheet extends StatelessWidget {
     final dialogH = (screen.height * 0.85).clamp(0.0, 800.0);
 
     final decoration = BoxDecoration(
-      color: AppColors.surfacePrimary.withValues(alpha: 0.97),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: accent.withValues(alpha: 0.35),
-        width: 1.5,
-      ),
+      color: AppColors.charcoalBlue,
+      borderRadius: BorderRadius.circular(24),
+      border: Border.all(color: AppColors.limeGreen.withValues(alpha: 0.3), width: 1.5),
       boxShadow: [
         BoxShadow(
-          color: accent.withValues(alpha: 0.12),
-          blurRadius: 40,
+          color: AppColors.limeGreen.withValues(alpha: 0.1),
+          blurRadius: 50,
           spreadRadius: -4,
         ),
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.4),
-          blurRadius: 60,
-          offset: const Offset(0, 20),
+          color: Colors.black.withValues(alpha: 0.6),
+          blurRadius: 80,
+          offset: const Offset(0, 30),
         ),
       ],
     );
@@ -61,9 +59,7 @@ class ProjectDetailSheet extends StatelessWidget {
       width: dialogW,
       height: dialogH,
       decoration: decoration,
-      child: RepaintBoundary(
-        child: _buildBody(context, dialogW, dialogH),
-      ),
+      child: RepaintBoundary(child: _buildBody(context, dialogW, dialogH)),
     );
 
     if (!kIsWeb) {
@@ -76,14 +72,22 @@ class ProjectDetailSheet extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.zero,
-      child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: content,
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        behavior: HitTestBehavior.opaque,
+        child: Center(
+          child: GestureDetector(
+            onTap: () {}, // Prevent taps on content from closing dialog
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: content,
+            ),
+          ),
         ),
       ),
     );
   }
+
   Widget _buildBody(BuildContext context, double dialogW, double dialogH) {
     return Column(
       children: [
@@ -107,23 +111,29 @@ class ProjectDetailSheet extends StatelessWidget {
                   children: [
                     Text(
                       project.title,
-                      style: AppTextStyles.h3(context).copyWith(
-                        color: AppColors.textPrimary,
+                      style: AppTextStyles.h2(
+                        context,
+                      ).copyWith(
+                        color: AppColors.silverGray,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 24,
                       ),
                     ),
                     Text(
                       project.subtitle,
-                      style: AppTextStyles.caption(context).copyWith(
-                        color: AppColors.textSecondary,
+                      style: AppTextStyles.caption(
+                        context,
+                      ).copyWith(
+                        color: AppColors.limeGreen,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ],
                 ),
               ),
               // Close button
-              _CloseButton(
-                onTap: () => Navigator.of(context).pop(),
-              ),
+              _CloseButton(onTap: () => Navigator.of(context).pop()),
             ],
           ),
         ),
@@ -152,25 +162,72 @@ class ProjectDetailSheet extends StatelessWidget {
                       .map((t) => ArchitectureBadge(label: t))
                       .toList(),
                 ),
-                const SizedBox(height: 18),
+                // Links (Moved to Top)
+                if (project.liveUrl != null ||
+                    project.appleStoreUrl != null ||
+                    project.webUrl != null ||
+                    project.githubUrl != null ||
+                    project.linkedinPostUrl != null) ...[
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      if (project.githubUrl != null)
+                        LinkButton(
+                          label: 'Source Code',
+                          icon: FontAwesomeIcons.github,
+                          url: project.githubUrl!,
+                          accent: accent,
+                        ),
+                      if (project.liveUrl != null)
+                        LinkButton(
+                          label: 'Play Store',
+                          icon: FontAwesomeIcons.googlePlay,
+                          url: project.liveUrl!,
+                          accent: accent,
+                        ),
+                      if (project.appleStoreUrl != null)
+                        LinkButton(
+                          label: 'App Store',
+                          icon: FontAwesomeIcons.apple,
+                          url: project.appleStoreUrl!,
+                          accent: accent,
+                        ),
+                      if (project.webUrl != null)
+                        LinkButton(
+                          label: 'Web App',
+                          icon: Icons.language_outlined,
+                          url: project.webUrl!,
+                          accent: accent,
+                        ),
+                      if (project.linkedinPostUrl != null)
+                        LinkButton(
+                          label: 'LinkedIn',
+                          icon: FontAwesomeIcons.linkedin,
+                          url: project.linkedinPostUrl!,
+                          accent: accent,
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
                 // Description
                 Text(
                   project.description,
-                  style: AppTextStyles.body(context).copyWith(
-                    color: AppColors.textSecondary,
-                    height: 1.7,
-                  ),
+                  style: AppTextStyles.body(
+                    context,
+                  ).copyWith(color: AppColors.textSecondary, height: 1.7),
                 ),
                 // Architecture highlights
                 if (project.architectureHighlights.isNotEmpty) ...[
                   const SizedBox(height: 20),
                   Text(
                     'Architecture Highlights',
-                    style: AppTextStyles.h3(context).copyWith(
-                      color: accent,
-                      fontSize: 13,
-                      letterSpacing: 0.6,
-                    ),
+                    style: AppTextStyles.h3(
+                      context,
+                    ).copyWith(color: accent, fontSize: 13, letterSpacing: 0.6),
                   ),
                   const SizedBox(height: 10),
                   ...project.architectureHighlights.map(
@@ -194,9 +251,7 @@ class ProjectDetailSheet extends StatelessWidget {
                           Expanded(
                             child: Text(
                               h,
-                              style: AppTextStyles.body(
-                                context,
-                              ).copyWith(
+                              style: AppTextStyles.body(context).copyWith(
                                 color: AppColors.textPrimary,
                                 fontSize: 14,
                                 height: 1.5,
@@ -206,49 +261,6 @@ class ProjectDetailSheet extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                ],
-                // Links
-                if (project.liveUrl != null ||
-                    project.appleStoreUrl != null ||
-                    project.webUrl != null ||
-                    project.githubUrl != null) ...[
-                  const SizedBox(height: 20),
-                  const Divider(color: AppColors.surfaceQuaternary),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      if (project.liveUrl != null)
-                        LinkButton(
-                          label: 'Play Store',
-                          icon: Icons.shop_outlined,
-                          url: project.liveUrl!,
-                          accent: accent,
-                        ),
-                      if (project.appleStoreUrl != null)
-                        LinkButton(
-                          label: 'App Store',
-                          icon: Icons.apple_outlined,
-                          url: project.appleStoreUrl!,
-                          accent: accent,
-                        ),
-                      if (project.webUrl != null)
-                        LinkButton(
-                          label: 'Web App',
-                          icon: Icons.language_outlined,
-                          url: project.webUrl!,
-                          accent: accent,
-                        ),
-                      if (project.githubUrl != null)
-                        LinkButton(
-                          label: 'Source Code',
-                          icon: Icons.code,
-                          url: project.githubUrl!,
-                          accent: accent,
-                        ),
-                    ],
                   ),
                 ],
               ],
@@ -282,9 +294,7 @@ class _CloseButtonState extends State<_CloseButton> {
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: _hovered
-                ? AppColors.surfaceTertiary
-                : Colors.transparent,
+            color: _hovered ? AppColors.surfaceTertiary : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(

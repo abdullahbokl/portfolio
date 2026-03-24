@@ -8,6 +8,7 @@ class ProjectModel {
     required this.techTags,
     required this.architectureHighlights,
     required this.icon,
+    this.thumbnailUrl,
     this.imageUrls = const [],
     this.linkedinPostUrl,
     this.liveUrl,
@@ -22,6 +23,7 @@ class ProjectModel {
   final List<String> techTags;
   final List<String> architectureHighlights;
   final IconData icon;
+  final String? thumbnailUrl;
   final List<String> imageUrls;
   final String? linkedinPostUrl;
   final String? liveUrl; // Google Play

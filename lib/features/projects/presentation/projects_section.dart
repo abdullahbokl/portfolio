@@ -14,7 +14,7 @@ class ProjectsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDesktop = context.isDesktop;
     final isTablet = context.isTablet;
-    final crossAxisCount = isDesktop ? 3 : isTablet ? 2 : 1;
+    final crossAxisCount = isDesktop ? 2 : isTablet ? 2 : 1;
     final projects = ProjectData.projects;
 
     // Build rows of crossAxisCount columns
@@ -39,39 +39,39 @@ class ProjectsSection extends StatelessWidget {
             color: context.accent.accent,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Text(
           ProjectStrings.projectsSectionSubtitle,
-          style: AppTextStyles.body(context).copyWith(
+          style: AppTextStyles.h3(context).copyWith(
             color: AppColors.textSecondary,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Text(
-          'Tap any project to explore details, screenshots & architecture.',
-          style: AppTextStyles.caption(context).copyWith(
+          'Detailed look into production-grade mobile ecosystems.',
+          style: AppTextStyles.body(context).copyWith(
             color: AppColors.textTertiary,
             fontStyle: FontStyle.italic,
           ),
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 40),
         // Simple grid — no IntrinsicHeight, each card is self-contained
         for (final row in rows) ...[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (int i = 0; i < row.length; i++) ...[
-                if (i > 0) const SizedBox(width: 16),
+                if (i > 0) const SizedBox(width: 24),
                 Expanded(child: ProjectCard(project: row[i])),
               ],
               // Fill remaining slots so alignment is consistent
               for (int i = row.length; i < crossAxisCount; i++) ...[
-                const SizedBox(width: 16),
+                const SizedBox(width: 24),
                 const Expanded(child: SizedBox.shrink()),
               ],
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
         ],
       ],
     );

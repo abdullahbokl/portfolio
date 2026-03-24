@@ -26,6 +26,12 @@ abstract final class AppColors {
   static const error = Color(0xFFEF4444);
   static const success = Color(0xFF22C55E);
 
+  // ── New Redesign Colors ───────────────────────
+  static const charcoalBlue = Color(0xFF0F111A);
+  static const limeGreen = Color(0xFF70D44B);
+  static const silverGray = Color(0xFFE0E0E0);
+  static const pillBg = Color(0xFF1A1D29);
+
   // ── Terminal ─────────────────────────────────
   static const terminalGreen = Color(0xFF00FF41);
   static const terminalBg = Color(0xFF0A0A0A);

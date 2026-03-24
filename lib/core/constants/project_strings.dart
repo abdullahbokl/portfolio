@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 abstract final class ProjectStrings {
   static const projectsSectionTitle = 'Engineered Systems';
   static const projectsSectionSubtitle =
@@ -23,6 +25,8 @@ abstract final class ProjectStrings {
     'Firebase',
     'Cloud Functions',
   ];
+  static const bokloThumbnail =
+      'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Boklo_Wallet/boklo_wallet.png';
   static const bokloImages = [
     'https://raw.githubusercontent.com/abdullahbokl/Boklo-Wallet/main/docs/screenshots/login_page.png',
     'https://raw.githubusercontent.com/abdullahbokl/Boklo-Wallet/main/docs/screenshots/wallet_page.png',
@@ -56,6 +60,8 @@ abstract final class ProjectStrings {
     'Doppler',
     'Shorebird',
   ];
+  static const crmThumbnail =
+      'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/smart_crm_2.png';
   static const crmImages = [
     'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S1.png',
     'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Smart_CRM/S2.png',
@@ -71,7 +77,7 @@ abstract final class ProjectStrings {
       'https://apps.apple.com/us/app/smart-crm/id6451082072';
 
   static const kiranaTitle = 'Billing Fast';
-  static const kiranaSubtitle = 'Scalable Inventory Suite';
+  static const kiranaSubtitle = 'Speedy Invoice Management';
   static const kiranaDescription =
       'A high-scale inventory management suite for international markets. '
       'Engineered complex batch-based stock tracking with multi-tier pricing '
@@ -89,6 +95,8 @@ abstract final class ProjectStrings {
     'Cloud Functions',
     'Google Maps',
   ];
+  static const kiranaThumbnail =
+      'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/billin_fast.png';
   static const kiranaImages = [
     'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B2.png',
     'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Billing_Fast/B3.png',
@@ -105,7 +113,7 @@ abstract final class ProjectStrings {
   static const kiranaWebsiteUrl = 'https://billingfast.com/';
 
   static const jobHubTitle = 'Job-Hub';
-  static const jobHubSubtitle = 'Full-Stack Ecosystem';
+  static const jobHubSubtitle = 'Modern Workforce Placement';
   static const jobHubDescription =
       'A real-time full-stack application built with Node.js, Express, and '
       'MongoDB. Features JWT-based authentication and real-time chat for '
@@ -123,6 +131,8 @@ abstract final class ProjectStrings {
     'Socket.io',
     'JWT',
   ];
+  static const jobHubThumbnail =
+      'https://raw.githubusercontent.com/abdullahbokl/projects-images/main/Job_Hub/job_hub.png';
   static const jobHubImages = [
     'https://raw.githubusercontent.com/abdullahbokl/Flutter-NodeJS-Full-Stack-App/main/docs/screenshots/splash-screen.jpg',
     'https://raw.githubusercontent.com/abdullahbokl/Flutter-NodeJS-Full-Stack-App/main/docs/screenshots/onboarding-discovery.jpg',
@@ -154,4 +164,11 @@ abstract final class ProjectStrings {
   static const netflixTech = ['Swift', 'UIKit', 'REST API', 'Local Storage'];
   static const netflixGithubUrl =
       'https://github.com/abdullahbokl/MoviesApp-iOS';
+ 
+  static Future<void> openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 }
