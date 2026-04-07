@@ -22,6 +22,11 @@ class _ParticleBackgroundState extends State<ParticleBackground>
   final _random = Random();
   bool _initialized = false;
 
+  // Optimized particle counts (reduced for better performance)
+  static const _particleCountMobile = 15;
+  static const _particleCountTablet = 25;
+  static const _particleCountDesktop = 35;
+
   @override
   void initState() {
     super.initState();
@@ -32,15 +37,22 @@ class _ParticleBackgroundState extends State<ParticleBackground>
     _particles = [];
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final size = MediaQuery.of(context).size;
+    _initParticles(size, context.isMobile, context.isTablet);
+  }
+
   void _initParticles(Size size, bool isMobile, bool isTablet) {
     if (_initialized) return;
     _initialized = true;
 
     final count = isMobile
-        ? 20
+        ? _particleCountMobile
         : isTablet
-        ? 30
-        : 50;
+        ? _particleCountTablet
+        : _particleCountDesktop;
 
     _particles = List.generate(count, (_) {
       return Particle(
@@ -63,7 +75,7 @@ class _ParticleBackgroundState extends State<ParticleBackground>
   @override
   Widget build(BuildContext context) {
     if (context.reduceMotion) {
-      return const SizedBox.expand();
+      return const SizedBox.shrink();
     }
 
     return LayoutBuilder(

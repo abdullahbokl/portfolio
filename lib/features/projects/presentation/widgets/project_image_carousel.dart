@@ -61,11 +61,17 @@ class _ProjectImageCarouselState extends State<ProjectImageCarousel> {
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
-                        memCacheWidth: 800, // Limit decode resolution to save memory
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: AppColors.surfaceTertiary,
-                          highlightColor: AppColors.surfaceQuaternary,
-                          child: Container(color: Colors.white),
+                        // Cache at 2x display size for retina displays
+                        maxWidthDiskCache: 800,
+                        maxHeightDiskCache: 600,
+                        memCacheWidth: 400,
+                        memCacheHeight: 300,
+                        placeholder: (context, url) => RepaintBoundary(
+                          child: Shimmer.fromColors(
+                            baseColor: AppColors.surfaceTertiary,
+                            highlightColor: AppColors.surfaceQuaternary,
+                            child: Container(color: Colors.white),
+                          ),
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: AppColors.surfaceTertiary,

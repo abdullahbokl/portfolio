@@ -21,7 +21,13 @@ class SocialLink extends StatefulWidget {
 }
 
 class _SocialLinkState extends State<SocialLink> {
-  bool _hovered = false;
+  final _hovered = ValueNotifier<bool>(false);
+
+  @override
+  void dispose() {
+    _hovered.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,40 +35,47 @@ class _SocialLinkState extends State<SocialLink> {
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: Semantics(
-        button: true,
-        label: 'Open ${widget.label}',
-        child: GestureDetector(
-          onTap: () => launchUrl(
-            Uri.parse(widget.url),
-            mode: LaunchMode.externalApplication,
-          ),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: _hovered ? accent : AppColors.surfaceQuaternary,
-                width: _hovered ? 1.5 : 1.0,
+      onEnter: (_) => _hovered.value = true,
+      onExit: (_) => _hovered.value = false,
+      child: RepaintBoundary(
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _hovered,
+          builder: (context, hovered, child) {
+            return Semantics(
+              button: true,
+              label: 'Open ${widget.label}',
+              child: GestureDetector(
+                onTap: () => launchUrl(
+                  Uri.parse(widget.url),
+                  mode: LaunchMode.externalApplication,
+                ),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: hovered ? accent : AppColors.surfaceQuaternary,
+                      width: hovered ? 1.5 : 1.0,
+                    ),
+                    color: hovered
+                        ? accent.withValues(alpha: 0.1)
+                        : Colors.transparent,
+                  ),
+                  child: AnimatedScale(
+                    scale: hovered ? 1.1 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      widget.icon,
+                      color: hovered ? accent : AppColors.textSecondary,
+                      size: 22,
+                    ),
+                  ),
+                ),
               ),
-              color: _hovered
-                  ? accent.withValues(alpha: 0.1)
-                  : Colors.transparent,
-            ),
-            child: AnimatedScale(
-              scale: _hovered ? 1.1 : 1.0,
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                widget.icon,
-                color: _hovered ? accent : AppColors.textSecondary,
-                size: 22,
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

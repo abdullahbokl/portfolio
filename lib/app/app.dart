@@ -16,22 +16,32 @@ class PortfolioApp extends StatelessWidget {
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
       ],
-      child: BlocBuilder<ThemeCubit, AppThemeMode>(
-        builder: (context, mode) {
-          final themeData = switch (mode) {
-            AppThemeMode.dark => AppTheme.dark,
-            AppThemeMode.uvGreen => AppTheme.uvGreen,
-            AppThemeMode.uvViolet => AppTheme.uvViolet,
-          };
+      child: const _PortfolioTheme(),
+    );
+  }
+}
 
-          return MaterialApp(
-            title: 'Abdullah Khaled Elbokl — Portfolio',
-            debugShowCheckedModeBanner: false,
-            theme: themeData,
-            home: const PortfolioRouter(),
-          );
-        },
-      ),
+/// Separate widget to handle theme changes without rebuilding providers
+class _PortfolioTheme extends StatelessWidget {
+  const _PortfolioTheme();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ThemeCubit, AppThemeMode>(
+      builder: (context, mode) {
+        final themeData = switch (mode) {
+          AppThemeMode.dark => AppTheme.dark,
+          AppThemeMode.uvGreen => AppTheme.uvGreen,
+          AppThemeMode.uvViolet => AppTheme.uvViolet,
+        };
+
+        return MaterialApp(
+          title: 'Abdullah Khaled Elbokl — Portfolio',
+          debugShowCheckedModeBanner: false,
+          theme: themeData,
+          home: const PortfolioRouter(),
+        );
+      },
     );
   }
 }

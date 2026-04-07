@@ -93,28 +93,24 @@ class _TypingTextState extends State<TypingText> {
       );
     }
 
+    // Combined builder to avoid nested rebuilds
     return Semantics(
       label: widget.phrases.join(', '),
-      child: ValueListenableBuilder<String>(
-        valueListenable: _textNotifier,
-        builder: (context, text, _) {
-          return ValueListenableBuilder<bool>(
-            valueListenable: _cursorNotifier,
-            builder: (context, cursorVisible, _) {
-              return Text.rich(
+      child: ListenableBuilder(
+        listenable: Listenable.merge([_textNotifier, _cursorNotifier]),
+        builder: (context, _) {
+          return Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: _textNotifier.value),
                 TextSpan(
-                  children: [
-                    TextSpan(text: text),
-                    TextSpan(
-                      text: cursorVisible ? '|' : ' ',
-                      style: style.copyWith(fontWeight: FontWeight.w300),
-                    ),
-                  ],
+                  text: _cursorNotifier.value ? '|' : ' ',
+                  style: style.copyWith(fontWeight: FontWeight.w300),
                 ),
-                style: style,
-                textAlign: TextAlign.center,
-              );
-            },
+              ],
+            ),
+            style: style,
+            textAlign: TextAlign.center,
           );
         },
       ),

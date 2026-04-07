@@ -90,10 +90,17 @@ class _ProjectCardState extends State<ProjectCard> {
                                 imageUrl: displayImage,
                                 fit: BoxFit.cover,
                                 alignment: Alignment.center,
-                                placeholder: (context, url) => Shimmer.fromColors(
-                                  baseColor: AppColors.surfaceQuaternary,
-                                  highlightColor: AppColors.surfaceTertiary,
-                                  child: Container(color: Colors.white),
+                                // Cache at 2x display size for retina displays
+                                maxWidthDiskCache: 800,
+                                maxHeightDiskCache: 400,
+                                memCacheWidth: 400,
+                                memCacheHeight: 200,
+                                placeholder: (context, url) => RepaintBoundary(
+                                  child: Shimmer.fromColors(
+                                    baseColor: AppColors.surfaceQuaternary,
+                                    highlightColor: AppColors.surfaceTertiary,
+                                    child: Container(color: Colors.white),
+                                  ),
                                 ),
                                 errorWidget: (context, url, error) => _buildImagePlaceholder(accent),
                               )

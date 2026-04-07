@@ -23,7 +23,13 @@ class AccentButton extends StatefulWidget {
 }
 
 class _AccentButtonState extends State<AccentButton> {
-  bool _hovered = false;
+  final _hovered = ValueNotifier<bool>(false);
+
+  @override
+  void dispose() {
+    _hovered.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +38,32 @@ class _AccentButtonState extends State<AccentButton> {
     if (widget.isPrimary) {
       return MouseRegion(
         cursor: SystemMouseCursors.click,
-        onEnter: (_) => setState(() => _hovered = true),
-        onExit: (_) => setState(() => _hovered = false),
-        child: Semantics(
-          button: true,
-          label: widget.label,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: accent.withValues(alpha: _hovered ? 0.4 : 0.2),
-                  blurRadius: _hovered ? 24 : 16,
+        onEnter: (_) => _hovered.value = true,
+        onExit: (_) => _hovered.value = false,
+        child: RepaintBoundary(
+          child: ValueListenableBuilder<bool>(
+            valueListenable: _hovered,
+            builder: (context, hovered, _) {
+              return Semantics(
+                button: true,
+                label: widget.label,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: accent.withValues(alpha: hovered ? 0.4 : 0.2),
+                        blurRadius: hovered ? 24 : 16,
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: widget.onPressed,
+                    child: _buildContent(AppColors.surfacePrimary),
+                  ),
                 ),
-              ],
-            ),
-            child: ElevatedButton(
-              onPressed: widget.onPressed,
-              child: _buildContent(AppColors.surfacePrimary),
-            ),
+              );
+            },
           ),
         ),
       );
@@ -58,19 +71,26 @@ class _AccentButtonState extends State<AccentButton> {
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: Semantics(
-        button: true,
-        label: widget.label,
-        child: OutlinedButton(
-          onPressed: widget.onPressed,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: _hovered
-                ? accent.withValues(alpha: 0.1)
-                : Colors.transparent,
-          ),
-          child: _buildContent(accent),
+      onEnter: (_) => _hovered.value = true,
+      onExit: (_) => _hovered.value = false,
+      child: RepaintBoundary(
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _hovered,
+          builder: (context, hovered, _) {
+            return Semantics(
+              button: true,
+              label: widget.label,
+              child: OutlinedButton(
+                onPressed: widget.onPressed,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: hovered
+                      ? accent.withValues(alpha: 0.1)
+                      : Colors.transparent,
+                ),
+                child: _buildContent(accent),
+              ),
+            );
+          },
         ),
       ),
     );

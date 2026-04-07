@@ -8,6 +8,9 @@ import 'package:portfolio/features/terminal/bloc/terminal_bloc.dart';
 import 'package:portfolio/features/terminal/bloc/terminal_event.dart';
 import 'package:portfolio/features/terminal/bloc/terminal_state.dart';
 import 'package:portfolio/features/terminal/presentation/terminal_overlay.dart';
+import 'package:portfolio/core/widgets/progress_indicator.dart';
+import 'package:portfolio/core/widgets/scroll_to_top.dart';
+import 'package:portfolio/core/widgets/keyboard_navigation.dart';
 
 class PortfolioRouter extends StatefulWidget {
   const PortfolioRouter({super.key});
@@ -20,6 +23,7 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
   int _tapCount = 0;
   DateTime? _lastTapTime;
   late final FocusNode _focusNode;
+  int _activeSection = 0;
 
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
     super.dispose();
   }
 
-  void _toggleTerminal() {
+  void _toggleTerminal(BuildContext context) {
     final bloc = context.read<TerminalBloc>();
     if (bloc.state.isOpen) {
       bloc.add(TerminalClosed());
@@ -42,7 +46,7 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
     }
   }
 
-  void _handleTripleTap() {
+  void _handleTripleTap(BuildContext context) {
     final now = DateTime.now();
     if (_lastTapTime != null &&
         now.difference(_lastTapTime!).inMilliseconds < 500) {
@@ -54,40 +58,36 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
 
     if (_tapCount >= 3) {
       _tapCount = 0;
-      _toggleTerminal();
+      _toggleTerminal(context);
     }
+  }
+
+  void _onSectionChanged(int index) {
+    setState(() {
+      _activeSection = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final navCubit = context.read<NavigationCubit>();
-    final keys = navCubit.state.sectionKeys;
+    final keys = navCubit.sectionKeys;
 
     return BlocProvider(
       create: (_) => TerminalBloc(),
       child: BlocBuilder<TerminalBloc, TerminalState>(
-        builder: (context, terminalState) {
-          return KeyboardListener(
-            focusNode: _focusNode,
-            autofocus: true,
-            onKeyEvent: (event) {
-              if (event is KeyDownEvent &&
-                  event.logicalKey == LogicalKeyboardKey.backquote) {
-                final bloc = context.read<TerminalBloc>();
-                if (bloc.state.isOpen) {
-                  bloc.add(TerminalClosed());
-                } else {
-                  bloc.add(TerminalOpened());
-                }
-              }
-              if (terminalState.isOpen &&
-                  event is KeyDownEvent &&
-                  event.logicalKey == LogicalKeyboardKey.escape) {
-                context.read<TerminalBloc>().add(TerminalClosed());
+        builder: (blocContext, terminalState) {
+          return KeyboardNavigation(
+            scrollController: navCubit.scrollController,
+            sectionKeys: keys,
+            onToggleTerminal: () => _toggleTerminal(blocContext),
+            onCloseOverlay: () {
+              if (terminalState.isOpen) {
+                blocContext.read<TerminalBloc>().add(TerminalClosed());
               }
             },
             child: Listener(
-              onPointerDown: (_) => _handleTripleTap(),
+              onPointerDown: (_) => _handleTripleTap(blocContext),
               child: Scaffold(
                 extendBodyBehindAppBar: true,
                 body: Stack(
@@ -96,10 +96,24 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
                       controller: navCubit.scrollController,
                       slivers: [
                         const NavBar(),
-                        SectionList(navCubit: navCubit, keys: keys),
+                        SectionList(
+                          navCubit: navCubit,
+                          onSectionChanged: _onSectionChanged,
+                        ),
                       ],
                     ),
                     const TerminalOverlay(),
+                    // Progress indicator
+                    SectionProgressIndicator(
+                      scrollController: navCubit.scrollController,
+                      sectionCount: 6,
+                      activeIndex: _activeSection,
+                      onSectionTap: (index) => navCubit.scrollTo(index),
+                    ),
+                    // Scroll to top button
+                    ScrollToTopButton(
+                      scrollController: navCubit.scrollController,
+                    ),
                   ],
                 ),
               ),

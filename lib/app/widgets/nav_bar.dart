@@ -59,14 +59,11 @@ class NavBar extends StatelessWidget {
                 ),
         ),
       ),
-      title: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () => context.read<NavigationCubit>().scrollTo(0),
-          child: Text(
-            'AE',
-            style: AppTextStyles.h3(context).copyWith(color: accent),
-          ),
+      title: GestureDetector(
+        onTap: () => context.read<NavigationCubit>().scrollTo(0),
+        child: Text(
+          'AE',
+          style: AppTextStyles.h3(context).copyWith(color: accent),
         ),
       ),
       actions: [

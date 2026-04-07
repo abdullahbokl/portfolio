@@ -19,6 +19,7 @@ class TerminalInput extends StatefulWidget {
 class _TerminalInputState extends State<TerminalInput> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
+  final _keyboardFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _TerminalInputState extends State<TerminalInput> {
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
+    _keyboardFocusNode.dispose();
     super.dispose();
   }
 
@@ -57,7 +59,7 @@ class _TerminalInputState extends State<TerminalInput> {
         ),
       ),
       child: KeyboardListener(
-        focusNode: FocusNode(),
+        focusNode: _keyboardFocusNode,
         onKeyEvent: (event) {
           if (event is KeyDownEvent) {
             final history = bloc.state.commandHistory;

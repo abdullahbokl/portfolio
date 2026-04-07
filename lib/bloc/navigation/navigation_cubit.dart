@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'navigation_state.dart';
 
 class NavigationCubit extends Cubit<NavigationState> {
-  NavigationCubit()
-    : super(
-        NavigationState(
-          activeIndex: 0,
-          sectionKeys: List.generate(6, (_) => GlobalKey()),
-        ),
-      );
+  // GlobalKeys are stable and not recreated on state changes
+  final List<GlobalKey> _sectionKeys = List.generate(6, (_) => GlobalKey());
+
+  NavigationCubit() : super(const NavigationState(activeIndex: 0));
+
+  List<GlobalKey> get sectionKeys => _sectionKeys;
 
   final ScrollController scrollController = ScrollController();
 
@@ -21,7 +20,7 @@ class NavigationCubit extends Cubit<NavigationState> {
   }
 
   Future<void> scrollTo(int index) async {
-    final key = state.sectionKeys[index];
+    final key = _sectionKeys[index];
     final ctx = key.currentContext;
     if (ctx != null) {
       await Scrollable.ensureVisible(

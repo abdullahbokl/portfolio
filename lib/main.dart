@@ -5,6 +5,7 @@ import 'app/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 50);
+  // Increased from 50ms to 200ms to reduce callback frequency during scroll
+  VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 200);
   runApp(const PortfolioApp());
 }

@@ -37,7 +37,7 @@ class _SectionWrapperState extends State<SectionWrapper>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    
+
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOutCubic,
@@ -79,18 +79,19 @@ class _SectionWrapperState extends State<SectionWrapper>
             ? 64.0
             : 48.0;
 
-    return VisibilityDetector(
-      key: Key('section-${widget.sectionKey.hashCode}'),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.5) {
-          widget.onVisible?.call();
-        }
-        // Animate in as soon as it starts appearing (0.03 threshold)
-        if (info.visibleFraction > 0.05) {
-          _onAppear();
-        }
-      },
-      child: RepaintBoundary(
+    return RepaintBoundary(
+      child: VisibilityDetector(
+        key: Key('section-${widget.sectionKey.hashCode}'),
+        onVisibilityChanged: (info) {
+          // Animate in as soon as it starts appearing (0.05 threshold)
+          if (info.visibleFraction > 0.05) {
+            _onAppear();
+          }
+          // Notify about section change (0.5 threshold)
+          if (info.visibleFraction > 0.5) {
+            widget.onVisible?.call();
+          }
+        },
         child: Container(
           key: widget.sectionKey,
           width: double.infinity,

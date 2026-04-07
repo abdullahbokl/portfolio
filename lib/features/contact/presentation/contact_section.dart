@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'widgets/social_link.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/widgets/section_divider.dart';
+import '../../../../core/animations/staggered_animation.dart';
+import 'widgets/social_link.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -16,10 +18,11 @@ class ContactSection extends StatelessWidget {
 
     return Column(
       children: [
-        Text(
-          AppStrings.contactTitle,
-          style: AppTextStyles.h2(context).copyWith(color: accent),
-          textAlign: TextAlign.center,
+        // Section header
+        const SectionDivider(
+          title: 'Contact',
+          icon: Icons.mail_outline,
+          subtitle: 'Get in touch',
         ),
         const SizedBox(height: 16),
         Text(
@@ -30,10 +33,9 @@ class ContactSection extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          alignment: WrapAlignment.center,
+        // Social links with staggered animation
+        StaggeredRow(
+          staggerDelay: const Duration(milliseconds: 80),
           children: [
             SocialLink(
               icon: FontAwesomeIcons.github,
@@ -63,7 +65,7 @@ class ContactSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 48),
-        Divider(color: AppColors.surfaceQuaternary, height: 1),
+        DottedDivider(color: AppColors.surfaceQuaternary),
         const SizedBox(height: 24),
         Text(
           AppStrings.contactCopyright,

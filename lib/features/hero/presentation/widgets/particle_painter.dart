@@ -22,29 +22,48 @@ class ParticlePainter extends CustomPainter {
   static const _connectionDistance = 120.0;
   static const _connectionDistanceSq = _connectionDistance * _connectionDistance;
 
+  // Spatial hash grid for optimized neighbor lookup
+  final Map<String, List<Particle>> _spatialGrid = {};
+  static const _cellSize = _connectionDistance;
+
   @override
   void paint(Canvas canvas, Size size) {
     _updateParticles(size);
+    _buildSpatialGrid();
 
-    // 1. Connection lines
+    // 1. Connection lines using spatial hashing (O(n) instead of O(n²))
     for (int i = 0; i < particles.length; i++) {
       final p1 = particles[i];
-      for (int j = i + 1; j < particles.length; j++) {
-        final p2 = particles[j];
-        final dx = p1.x - p2.x;
-        final dy = p1.y - p2.y;
-        final distSq = dx * dx + dy * dy;
+      final cellX = (p1.x / _cellSize).floor();
+      final cellY = (p1.y / _cellSize).floor();
 
-        if (distSq < _connectionDistanceSq) {
-          final dist = sqrt(distSq);
-          final opacity = (1 - dist / _connectionDistance) * 0.15;
-          _linePaint.color = accentColor.withValues(alpha: opacity);
-          
-          canvas.drawLine(
-            Offset(p1.x, p1.y),
-            Offset(p2.x, p2.y),
-            _linePaint,
-          );
+      // Check only neighboring cells
+      for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+          final key = '${cellX + dx},${cellY + dy}';
+          final neighbors = _spatialGrid[key];
+          if (neighbors == null) continue;
+
+          for (final p2 in neighbors) {
+            // Skip self and avoid duplicate checks
+            if (identical(p1, p2) || p1.hashCode < p2.hashCode) continue;
+
+            final ddx = p1.x - p2.x;
+            final ddy = p1.y - p2.y;
+            final distSq = ddx * ddx + ddy * ddy;
+
+            if (distSq < _connectionDistanceSq) {
+              final dist = sqrt(distSq);
+              final opacity = (1 - dist / _connectionDistance) * 0.15;
+              _linePaint.color = accentColor.withValues(alpha: opacity);
+
+              canvas.drawLine(
+                Offset(p1.x, p1.y),
+                Offset(p2.x, p2.y),
+                _linePaint,
+              );
+            }
+          }
         }
       }
     }
@@ -54,6 +73,16 @@ class ParticlePainter extends CustomPainter {
       final p = particles[i];
       _particlePaint.color = accentColor.withValues(alpha: p.opacity);
       canvas.drawCircle(Offset(p.x, p.y), p.radius, _particlePaint);
+    }
+  }
+
+  void _buildSpatialGrid() {
+    _spatialGrid.clear();
+    for (final p in particles) {
+      final cellX = (p.x / _cellSize).floor();
+      final cellY = (p.y / _cellSize).floor();
+      final key = '$cellX,$cellY';
+      _spatialGrid.putIfAbsent(key, () => []).add(p);
     }
   }
 

@@ -15,6 +15,8 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
     on<TerminalCleared>(_onCleared);
   }
 
+  static const _maxHistory = 100;
+
   void _onOpened(TerminalOpened event, Emitter<TerminalState> emit) {
     if (state.isOpen) return;
     emit(
@@ -41,7 +43,11 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
     if (cmd.isEmpty) return;
 
     final result = TerminalCommands.execute(cmd);
+    // Limit history size to prevent memory issues
     final newHistory = [...state.commandHistory, cmd];
+    if (newHistory.length > _maxHistory) {
+      newHistory.removeAt(0);
+    }
 
     if (cmd.toLowerCase() == 'clear') {
       emit(

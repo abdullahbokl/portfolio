@@ -184,13 +184,20 @@ class _ImageLightboxState extends State<ImageLightbox> {
                             child: CachedNetworkImage(
                               imageUrl: widget.images[index],
                               fit: BoxFit.contain,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: AppColors.surfaceTertiary,
-                                highlightColor: AppColors.surfaceQuaternary,
-                                child: Container(
-                                  color: Colors.white,
-                                  width: 300,
-                                  height: 500,
+                              // Full resolution for lightbox view
+                              maxWidthDiskCache: 1200,
+                              maxHeightDiskCache: 900,
+                              memCacheWidth: 600,
+                              memCacheHeight: 450,
+                              placeholder: (context, url) => RepaintBoundary(
+                                child: Shimmer.fromColors(
+                                  baseColor: AppColors.surfaceTertiary,
+                                  highlightColor: AppColors.surfaceQuaternary,
+                                  child: Container(
+                                    color: Colors.white,
+                                    width: 300,
+                                    height: 500,
+                                  ),
                                 ),
                               ),
                               errorWidget: (context, url, error) => const Center(

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
-import '../../../core/constants/project_strings.dart';
+import '../../../../core/constants/project_strings.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/widgets/section_divider.dart';
+import '../../../../core/animations/staggered_animation.dart';
 import '../data/project_data.dart';
 import 'widgets/project_card.dart';
 
@@ -17,63 +19,38 @@ class ProjectsSection extends StatelessWidget {
     final crossAxisCount = isDesktop ? 2 : isTablet ? 2 : 1;
     final projects = ProjectData.projects;
 
-    // Build rows of crossAxisCount columns
-    final rows = <List>[];
-    for (int i = 0; i < projects.length; i += crossAxisCount) {
-      rows.add(
-        projects.sublist(
-          i,
-          (i + crossAxisCount > projects.length)
-              ? projects.length
-              : i + crossAxisCount,
-        ),
-      );
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          ProjectStrings.projectsSectionTitle,
-          style: AppTextStyles.h2(context).copyWith(
-            color: context.accent.accent,
-          ),
+        // Section header with divider
+        const SectionDivider(
+          title: 'Projects',
+          icon: Icons.folder_outlined,
+          subtitle: 'Featured work and case studies',
         ),
-        const SizedBox(height: 20),
-        Text(
-          ProjectStrings.projectsSectionSubtitle,
-          style: AppTextStyles.h3(context).copyWith(
-            color: AppColors.textSecondary,
-          ),
+        const SizedBox(height: 24),
+        // Project cards with staggered animation
+        StaggeredAnimation(
+          staggerDelay: const Duration(milliseconds: 120),
+          children: [
+            for (int i = 0; i < projects.length; i += crossAxisCount)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int j = i; j < min(i + crossAxisCount, projects.length); j++) ...[
+                      if (j > i) const SizedBox(width: 24),
+                      Expanded(child: ProjectCard(project: projects[j])),
+                    ],
+                  ],
+                ),
+              ),
+          ],
         ),
-        const SizedBox(height: 12),
-        Text(
-          'Detailed look into production-grade mobile ecosystems.',
-          style: AppTextStyles.body(context).copyWith(
-            color: AppColors.textTertiary,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-        const SizedBox(height: 40),
-        // Simple grid — no IntrinsicHeight, each card is self-contained
-        for (final row in rows) ...[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (int i = 0; i < row.length; i++) ...[
-                if (i > 0) const SizedBox(width: 24),
-                Expanded(child: ProjectCard(project: row[i])),
-              ],
-              // Fill remaining slots so alignment is consistent
-              for (int i = row.length; i < crossAxisCount; i++) ...[
-                const SizedBox(width: 24),
-                const Expanded(child: SizedBox.shrink()),
-              ],
-            ],
-          ),
-          const SizedBox(height: 24),
-        ],
       ],
     );
   }
+
+  int min(int a, int b) => a < b ? a : b;
 }

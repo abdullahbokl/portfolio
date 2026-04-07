@@ -16,13 +16,34 @@ class TiltCardWrapper extends StatefulWidget {
   State<TiltCardWrapper> createState() => _TiltCardWrapperState();
 }
 
-class _TiltCardWrapperState extends State<TiltCardWrapper> {
-  double _x = 0;
-  double _y = 0;
+class _TiltCardWrapperState extends State<TiltCardWrapper>
+    with SingleTickerProviderStateMixin {
+  double _targetX = 0;
+  double _targetY = 0;
+  late AnimationController _controller;
+  late Animation<double> _xAnimation;
+  late Animation<double> _yAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _xAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
+    _yAnimation = Tween<double>(begin: 0, end: 0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _onHover(PointerEvent event) {
     if (context.reduceMotion) return;
-    
+
     final size = context.size;
     if (size == null) return;
 
@@ -31,36 +52,56 @@ class _TiltCardWrapperState extends State<TiltCardWrapper> {
     final dx = (localPosition.dx - (size.width / 2)) / (size.width / 2);
     final dy = (localPosition.dy - (size.height / 2)) / (size.height / 2);
 
-    setState(() {
-      _x = dy * widget.maxTilt;
-      _y = -dx * widget.maxTilt;
-    });
+    // Only update if values changed significantly (debouncing)
+    final newX = dy * widget.maxTilt;
+    final newY = -dx * widget.maxTilt;
+    if ((newX - _targetX).abs() > 0.001 || (newY - _targetY).abs() > 0.001) {
+      setState(() {
+        _targetX = newX;
+        _targetY = newY;
+      });
+      _xAnimation = Tween<double>(begin: _xAnimation.value, end: _targetX)
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+      _yAnimation = Tween<double>(begin: _yAnimation.value, end: _targetY)
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+      _controller.forward(from: 0);
+    }
   }
 
   void _onExit(PointerEvent event) {
-    setState(() {
-      _x = 0;
-      _y = 0;
-    });
+    if (_targetX != 0 || _targetY != 0) {
+      _xAnimation = Tween<double>(begin: _xAnimation.value, end: 0)
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+      _yAnimation = Tween<double>(begin: _yAnimation.value, end: 0)
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+      _controller.forward(from: 0);
+      setState(() {
+        _targetX = 0;
+        _targetY = 0;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final transform = Matrix4.identity()
-      ..setEntry(3, 2, 0.001) // perspective
-      ..rotateX(_x)
-      ..rotateY(_y);
-
     return MouseRegion(
       onHover: _onHover,
       onExit: _onExit,
       cursor: SystemMouseCursors.click,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOutCubic,
-        transform: transform,
-        transformAlignment: Alignment.center,
-        child: widget.child,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          final transform = Matrix4.identity()
+            ..setEntry(3, 2, 0.001) // perspective
+            ..rotateX(_xAnimation.value)
+            ..rotateY(_yAnimation.value);
+
+          return Transform(
+            transform: transform,
+            alignment: Alignment.center,
+            child: widget.child,
+          );
+        },
       ),
     );
   }

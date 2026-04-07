@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// A grid that ensures all items in the same row have equal height.
 /// Uses [IntrinsicHeight] + [Row] per visual row so cards stretch
 /// to match the tallest sibling in their row.
+///
+/// Optimized with [RepaintBoundary] to reduce repaint scope.
 class EqualHeightGrid extends StatelessWidget {
   const EqualHeightGrid({
     required this.columns,
@@ -32,21 +34,23 @@ class EqualHeightGrid extends StatelessWidget {
       children: [
         for (int r = 0; r < rows.length; r++) ...[
           if (r > 0) SizedBox(height: runSpacing),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (int c = 0; c < rows[r].length; c++) ...[
-                  if (c > 0) SizedBox(width: spacing),
-                  Expanded(child: rows[r][c]),
+          RepaintBoundary(
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (int c = 0; c < rows[r].length; c++) ...[
+                    if (c > 0) SizedBox(width: spacing),
+                    Expanded(child: rows[r][c]),
+                  ],
+                  // Fill remaining columns in the last row with empty Expanded
+                  // to maintain consistent card widths
+                  for (int c = rows[r].length; c < columns; c++) ...[
+                    if (c > 0) SizedBox(width: spacing),
+                    const Expanded(child: SizedBox.shrink()),
+                  ],
                 ],
-                // Fill remaining columns in the last row with empty Expanded
-                // to maintain consistent card widths
-                for (int c = rows[r].length; c < columns; c++) ...[
-                  SizedBox(width: spacing),
-                  const Expanded(child: SizedBox.shrink()),
-                ],
-              ],
+              ),
             ),
           ),
         ],

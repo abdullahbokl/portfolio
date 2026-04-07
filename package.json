@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "bash build.sh"
+  },
+  "dependencies": {
+    "@composio/ao-cli": "^0.2.2"
   }
 }

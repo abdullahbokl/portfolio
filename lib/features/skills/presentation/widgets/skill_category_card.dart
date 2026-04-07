@@ -60,7 +60,7 @@ class _SkillCategoryCardState extends State<SkillCategoryCard>
     return VisibilityDetector(
       key: Key('skill-${widget.category.title}'),
       onVisibilityChanged: (info) {
-        if (!_hasAnimated && info.visibleFraction > 0.4) {
+        if (!_hasAnimated && info.visibleFraction > 0.3) {
           _hasAnimated = true;
           _controller.forward();
         }
