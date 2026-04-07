@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:portfolio/bloc/navigation/navigation_cubit.dart';
 import 'package:portfolio/app/widgets/nav_bar.dart';
@@ -63,6 +62,7 @@ class _PortfolioRouterState extends State<PortfolioRouter> {
   }
 
   void _onSectionChanged(int index) {
+    if (!mounted) return;
     setState(() {
       _activeSection = index;
     });

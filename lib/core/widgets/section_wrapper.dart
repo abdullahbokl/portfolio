@@ -83,6 +83,7 @@ class _SectionWrapperState extends State<SectionWrapper>
       child: VisibilityDetector(
         key: Key('section-${widget.sectionKey.hashCode}'),
         onVisibilityChanged: (info) {
+          if (!mounted) return;
           // Animate in as soon as it starts appearing (0.05 threshold)
           if (info.visibleFraction > 0.05) {
             _onAppear();

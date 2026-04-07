@@ -25,11 +25,32 @@ class KeyboardNavigation extends StatefulWidget {
 
 class _KeyboardNavigationState extends State<KeyboardNavigation> {
   int _currentSection = 0;
+  late final FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void didUpdateWidget(covariant KeyboardNavigation oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_currentSection >= widget.sectionKeys.length) {
+      _currentSection = widget.sectionKeys.isEmpty ? 0 : widget.sectionKeys.length - 1;
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return KeyboardListener(
-      focusNode: FocusNode(),
+      focusNode: _focusNode,
       autofocus: true,
       onKeyEvent: (event) {
         if (event is! KeyDownEvent) return;

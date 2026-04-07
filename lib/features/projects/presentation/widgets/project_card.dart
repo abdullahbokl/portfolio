@@ -40,36 +40,51 @@ class _ProjectCardState extends State<ProjectCard> {
         onExit: (_) => setState(() => _hovered = false),
         child: GestureDetector(
           onTap: () => ProjectDetailSheet.show(context, p, accent),
-          child: Stack(
-            children: [
-              // 1. Static/Animated Background Layer
-              Positioned.fill(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut,
-                  decoration: BoxDecoration(
-                    color: _hovered
-                        ? AppColors.surfaceTertiary
-                        : AppColors.charcoalBlue,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            transform: Matrix4.identity()..translate(_hovered ? -4.0 : 0.0, 0.0, 0.0),
+            child: Stack(
+              children: [
+                // 1. Glassmorphism Background Layer
+                Positioned.fill(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeInOut,
+                    decoration: BoxDecoration(
                       color: _hovered
-                          ? accent.withValues(alpha: 0.8)
-                          : AppColors.surfaceQuaternary,
-                      width: _hovered ? 2 : 1,
+                          ? AppColors.surfaceTertiary.withValues(alpha: 0.95)
+                          : AppColors.charcoalBlue.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: _hovered
+                            ? accent.withValues(alpha: 0.6)
+                            : AppColors.surfaceQuaternary.withValues(alpha: 0.3),
+                        width: _hovered ? 1.5 : 1,
+                      ),
+                      boxShadow: _hovered
+                          ? [
+                              BoxShadow(
+                                color: accent.withValues(alpha: 0.25),
+                                blurRadius: 30,
+                                spreadRadius: -5,
+                              ),
+                              BoxShadow(
+                                color: accent.withValues(alpha: 0.1),
+                                blurRadius: 60,
+                                spreadRadius: -10,
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
                     ),
-                    boxShadow: _hovered
-                        ? [
-                            BoxShadow(
-                              color: accent.withValues(alpha: 0.2),
-                              blurRadius: 40,
-                              spreadRadius: -2,
-                            ),
-                          ]
-                        : [],
                   ),
                 ),
-              ),
 
               // 2. Card Content (Column)
               Column(
@@ -111,61 +126,95 @@ class _ProjectCardState extends State<ProjectCard> {
 
                   // --- FOOTER (Icon + Title/Subtitle + Links) ---
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 2, 16, 20),
-                    child: Row(
+                    padding: const EdgeInsets.fromLTRB(16, 2, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Left: Project Icon Box
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: accent.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(p.icon, color: accent, size: 22),
-                        ),
-                        const SizedBox(width: 14),
-                        // Middle: Text Info
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                p.title,
-                                style: AppTextStyles.h3(context).copyWith(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              Text(
-                                p.subtitle,
-                                style: AppTextStyles.caption(context).copyWith(
-                                  color: AppColors.textTertiary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Right: Floating Link Icons
-                        const SizedBox(width: 8),
                         Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (p.githubUrl != null)
-                              _buildIconLink(FontAwesomeIcons.github, p.githubUrl!, accent),
-                            if (p.liveUrl != null)
-                              _buildIconLink(FontAwesomeIcons.googlePlay, p.liveUrl!, accent),
-                            if (p.appleStoreUrl != null)
-                              _buildIconLink(FontAwesomeIcons.apple, p.appleStoreUrl!, accent),
-                            if (p.webUrl != null)
-                              _buildIconLink(Icons.language, p.webUrl!, accent),
+                            // Left: Project Icon Box
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: accent.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(p.icon, color: accent, size: 22),
+                            ),
+                            const SizedBox(width: 14),
+                            // Middle: Text Info
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    p.title,
+                                    style: AppTextStyles.h3(context).copyWith(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  Text(
+                                    p.subtitle,
+                                    style: AppTextStyles.caption(context).copyWith(
+                                      color: AppColors.textTertiary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Right: Floating Link Icons
+                            const SizedBox(width: 8),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (p.githubUrl != null)
+                                  _buildIconLink(FontAwesomeIcons.github, p.githubUrl!, accent),
+                                if (p.liveUrl != null)
+                                  _buildIconLink(FontAwesomeIcons.googlePlay, p.liveUrl!, accent),
+                                if (p.appleStoreUrl != null)
+                                  _buildIconLink(FontAwesomeIcons.apple, p.appleStoreUrl!, accent),
+                                if (p.webUrl != null)
+                                  _buildIconLink(Icons.language, p.webUrl!, accent),
+                              ],
+                            ),
                           ],
                         ),
+                        // Tech tags
+                        if (p.techTags.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: p.techTags.take(4).map((tag) {
+                              return AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: accent.withValues(alpha: _hovered ? 0.2 : 0.1),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: accent.withValues(alpha: _hovered ? 0.4 : 0.2),
+                                  ),
+                                ),
+                                child: Text(
+                                  tag,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: accent,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -175,7 +224,7 @@ class _ProjectCardState extends State<ProjectCard> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildImagePlaceholder(Color accent) {

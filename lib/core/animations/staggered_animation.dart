@@ -24,15 +24,38 @@ class StaggeredAnimation extends StatefulWidget {
 
 class _StaggeredAnimationState extends State<StaggeredAnimation>
     with TickerProviderStateMixin {
-  late final List<AnimationController> _controllers;
-  late final List<Animation<double>> _opacityAnimations;
-  late final List<Animation<Offset>> _slideAnimations;
-  late final List<Animation<double>> _scaleAnimations;
-  bool _hasStarted = false;
+  List<AnimationController> _controllers = const [];
+  List<Animation<double>> _opacityAnimations = const [];
+  List<Animation<Offset>> _slideAnimations = const [];
+  List<Animation<double>> _scaleAnimations = const [];
+  int _animationGeneration = 0;
 
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+  }
+
+  @override
+  void didUpdateWidget(covariant StaggeredAnimation oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.children.length != widget.children.length ||
+        oldWidget.delay != widget.delay ||
+        oldWidget.staggerDelay != widget.staggerDelay ||
+        oldWidget.startOffset != widget.startOffset ||
+        oldWidget.startScale != widget.startScale) {
+      _initializeAnimations();
+    }
+  }
+
+  void _initializeAnimations() {
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
+
+    _animationGeneration++;
+    final generation = _animationGeneration;
+
     _controllers = List.generate(
       widget.children.length,
       (i) => AnimationController(
@@ -71,16 +94,19 @@ class _StaggeredAnimationState extends State<StaggeredAnimation>
       )),
     );
 
-    _startAnimation();
+    _startAnimation(generation);
   }
 
-  Future<void> _startAnimation() async {
+  Future<void> _startAnimation(int generation) async {
     await Future.delayed(widget.delay);
-    if (!mounted) return;
-    _hasStarted = true;
+    if (!mounted || generation != _animationGeneration) return;
     for (int i = 0; i < _controllers.length; i++) {
-      if (!mounted) break;
-      await _controllers[i].forward();
+      if (!mounted || generation != _animationGeneration) break;
+      try {
+        await _controllers[i].forward().orCancel;
+      } on TickerCanceled {
+        return;
+      }
       await Future.delayed(widget.staggerDelay);
     }
   }
@@ -142,14 +168,38 @@ class StaggeredRow extends StatefulWidget {
 
 class _StaggeredRowState extends State<StaggeredRow>
     with TickerProviderStateMixin {
-  late final List<AnimationController> _controllers;
-  late final List<Animation<double>> _opacityAnimations;
-  late final List<Animation<Offset>> _slideAnimations;
-  late final List<Animation<double>> _scaleAnimations;
+  List<AnimationController> _controllers = const [];
+  List<Animation<double>> _opacityAnimations = const [];
+  List<Animation<Offset>> _slideAnimations = const [];
+  List<Animation<double>> _scaleAnimations = const [];
+  int _animationGeneration = 0;
 
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+  }
+
+  @override
+  void didUpdateWidget(covariant StaggeredRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.children.length != widget.children.length ||
+        oldWidget.delay != widget.delay ||
+        oldWidget.staggerDelay != widget.staggerDelay ||
+        oldWidget.startOffset != widget.startOffset ||
+        oldWidget.startScale != widget.startScale) {
+      _initializeAnimations();
+    }
+  }
+
+  void _initializeAnimations() {
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
+
+    _animationGeneration++;
+    final generation = _animationGeneration;
+
     _controllers = List.generate(
       widget.children.length,
       (i) => AnimationController(
@@ -188,15 +238,19 @@ class _StaggeredRowState extends State<StaggeredRow>
       )),
     );
 
-    _startAnimation();
+    _startAnimation(generation);
   }
 
-  Future<void> _startAnimation() async {
+  Future<void> _startAnimation(int generation) async {
     await Future.delayed(widget.delay);
-    if (!mounted) return;
+    if (!mounted || generation != _animationGeneration) return;
     for (int i = 0; i < _controllers.length; i++) {
-      if (!mounted) break;
-      await _controllers[i].forward();
+      if (!mounted || generation != _animationGeneration) break;
+      try {
+        await _controllers[i].forward().orCancel;
+      } on TickerCanceled {
+        return;
+      }
       await Future.delayed(widget.staggerDelay);
     }
   }

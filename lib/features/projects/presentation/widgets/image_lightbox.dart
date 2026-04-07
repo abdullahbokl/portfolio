@@ -49,6 +49,7 @@ class ImageLightbox extends StatefulWidget {
 
 class _ImageLightboxState extends State<ImageLightbox> {
   late final PageController _pageController;
+  late final FocusNode _focusNode;
   late int _currentIndex;
 
   // One TransformationController per page so zooms are independent
@@ -76,12 +77,14 @@ class _ImageLightboxState extends State<ImageLightbox> {
     super.initState();
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: widget.initialIndex);
+    _focusNode = FocusNode()..requestFocus();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _focusNode.dispose();
     for (final c in _transformControllers.values) {
       c.dispose();
     }
@@ -121,7 +124,7 @@ class _ImageLightboxState extends State<ImageLightbox> {
     final canZoomOut = _currentScale > _minScale + 0.1;
 
     return KeyboardListener(
-      focusNode: FocusNode()..requestFocus(),
+      focusNode: _focusNode,
       onKeyEvent: (event) {
         if (event is KeyDownEvent) {
           if (event.logicalKey == LogicalKeyboardKey.escape) _close();

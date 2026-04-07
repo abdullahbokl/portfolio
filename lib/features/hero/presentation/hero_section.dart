@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/parallax_hero.dart';
@@ -25,6 +23,25 @@ class HeroSection extends StatelessWidget {
         children: [
           // Background layer (particles)
           const Positioned.fill(child: ParticleBackground()),
+          
+          // Floating geometric shapes
+          const Positioned.fill(child: FloatingShapes()),
+          
+          // Radial gradient overlay for depth
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.topCenter,
+                  radius: 1.5,
+                  colors: [
+                    accentColor.withValues(alpha: 0.08),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
           
           // Foreground content with parallax
           Positioned.fill(

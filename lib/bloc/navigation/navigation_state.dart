@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class NavigationState {
   const NavigationState({required this.activeIndex});
 
