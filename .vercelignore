@@ -1,0 +1,12 @@
+# Ignore build and cached dependencies
+build/
+.dart_tool/
+.idea/
+.metadata
+android/
+ios/
+linux/
+windows/
+macos/
+flutter/
+*.iml
