@@ -1,80 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="$FLUTTER_BASE_HREF">
-
-  <meta charset="UTF-8">
+  <base href="/">
+  <meta charset="utf-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfolio of Eng. Abdullah Khaled Elbokl. Mobile Application Developer specializing in Flutter & SwiftUI. ICPC Regional Finalist. Clean Architecture, production-grade systems.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A0E1A">
-  <meta name="author" content="Abdullah Khaled Elbokl">
-  <meta name="keywords" content="Flutter, SwiftUI, Software Engineer, ICPC, Clean Architecture, Bloc, Portfolio, Mobile Developer">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Abdullah Khaled Elbokl — Mobile Application Developer">
-  <meta property="og:description" content="Flutter & SwiftUI Specialist. ICPC Regional Finalist. Building production-grade, backend-authoritative systems.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://abdullahbokl.dev">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Abdullah Khaled Elbokl">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>Abdullah Khaled Elbokl — Mobile Application Developer</title>
-  <link rel="manifest" href="manifest.json">
-
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Abdullah Khaled Elbokl",
-    "jobTitle": "Mobile Application Developer",
-    "url": "https://abdullahbokl.dev",
-    "sameAs": [
-      "https://github.com/abdullahbokl",
-      "https://www.linkedin.com/in/abdullahbokl/",
-      "https://leetcode.com/u/Bokl2002/",
-      "https://codeforces.com/profile/Bokl2002"
-    ],
-    "knowsAbout": ["Flutter", "SwiftUI", "Clean Architecture", "Firebase", "Bloc"]
-  }
-  </script>
-
+  <meta name="description" content="Portfolio of Eng. Abdullah Khaled Elbokl — Portfolio">
+  <title>Abdullah Khaled Elbokl — Portfolio</title>
   <style>
-    /* Loading background to avoid white flash */
-    body { background-color: #0A0E1A; margin: 0; }
-    /* Simple spinner */
-    @keyframes goose-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .goose-loader { width: 56px; height: 56px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.08); border-top-color: #4FC3F7; animation: goose-spin 1s linear infinite; margin: 0 auto 12px; }
+    body{background:#0A0E1A;margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:#fff}
+    .loader-wrap{display:flex;align-items:center;justify-content:center;height:100vh}
+    .loader-box{width:min(720px,90%);text-align:center}
+    .linear{height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;position:relative}
+    .linear .bar{position:absolute;left:0;top:0;height:100%;width:0%;background:linear-gradient(90deg,#4FC3F7,#00E676);transition:width 600ms cubic-bezier(.2,.8,.2,1)}
+    .linear .stripe{position:absolute;inset:0;background-image:linear-gradient(135deg, rgba(255,255,255,0.06) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.06) 75%, transparent 75%, transparent);background-size:24px 24px;animation:move 1.6s linear infinite;opacity:0.25}
+    @keyframes move{from{background-position:0 0}to{background-position:24px 24px}}
+    .loading-label{margin-top:12px;font-size:15px;opacity:0.95}
+    .loader-small{margin-top:8px;font-size:13px;opacity:0.8}
+    .retry{margin-top:10px;color:#ffd1d1;display:none}
   </style>
 </head>
 <body>
-  <div id="app-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0A0E1A;color:#ffffff;font-family:Inter,system-ui,Arial,sans-serif;">
-    <div style="text-align:center;">
-      <div class="goose-loader" aria-hidden="true"></div>
-      <div style="font-size:16px;opacity:0.95">Loading…</div>
+  <div id="app-loading" class="loader-wrap" aria-live="polite">
+    <div class="loader-box">
+      <div class="linear" aria-hidden="true">
+        <div class="bar" id="linear-bar"></div>
+        <div class="stripe"></div>
+      </div>
+      <div class="loading-label">Loading portfolio…</div>
+      <div class="loader-small">Preparing experience and projects</div>
+      <div id="retry" class="retry">Failed to load. <a href="" style="color:#fff;text-decoration:underline">Retry</a></div>
     </div>
   </div>
 
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    // Hide/remove our static loader when the window loads or when Flutter replaces the DOM.
-    window.addEventListener('load', function() {
-      var loader = document.getElementById('app-loading');
-      if (loader) loader.style.display = 'none';
-    });
-    // Fallback: try to remove loader after a reasonable timeout in case Flutter doesn't dispatch a first-frame event.
-    setTimeout(function(){
-      var loader = document.getElementById('app-loading');
-      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
-    }, 5000);
+    (function(){
+      var start = performance && performance.now ? performance.now() : Date.now();
+      var bar = document.getElementById('linear-bar');
+      var retry = document.getElementById('retry');
+      var shown = true;
+
+      function hideLoaderSoon(){
+        try{ bar.style.width = '100%'; }catch(e){}
+        setTimeout(function(){ var el = document.getElementById('app-loading'); if (el) el.style.display='none'; shown=false; }, 300);
+        console.log('loader:hide');
+      }
+
+      function showRetry(){ if (retry) retry.style.display='block'; }
+
+      try{ bar.style.width='30%'; }catch(e){}
+
+      document.addEventListener('flutter-first-frame', function(){ console.log('event:flutter-first-frame'); hideLoaderSoon(); }, { once:true });
+      window.addEventListener('load', function(){ console.log('event:window-load'); hideLoaderSoon(); }, { once:true });
+      setTimeout(function(){ if (shown){ try{ bar.style.width='60%'; }catch(e){}; showRetry(); console.warn('loader:fallback'); } }, 12000);
+      window.addEventListener('error', function(e){ console.error('window:error',e); showRetry(); }, { once:true });
+
+    })();
   </script>
 </body>
 </html>
