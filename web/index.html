@@ -50,9 +50,31 @@
   <style>
     /* Loading background to avoid white flash */
     body { background-color: #0A0E1A; margin: 0; }
+    /* Simple spinner */
+    @keyframes goose-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .goose-loader { width: 56px; height: 56px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.08); border-top-color: #4FC3F7; animation: goose-spin 1s linear infinite; margin: 0 auto 12px; }
   </style>
 </head>
 <body>
+  <div id="app-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0A0E1A;color:#ffffff;font-family:Inter,system-ui,Arial,sans-serif;">
+    <div style="text-align:center;">
+      <div class="goose-loader" aria-hidden="true"></div>
+      <div style="font-size:16px;opacity:0.95">Loading…</div>
+    </div>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Hide/remove our static loader when the window loads or when Flutter replaces the DOM.
+    window.addEventListener('load', function() {
+      var loader = document.getElementById('app-loading');
+      if (loader) loader.style.display = 'none';
+    });
+    // Fallback: try to remove loader after a reasonable timeout in case Flutter doesn't dispatch a first-frame event.
+    setTimeout(function(){
+      var loader = document.getElementById('app-loading');
+      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+    }, 5000);
+  </script>
 </body>
 </html>
