@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="/">
-  <meta charset="utf-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0A0E1A">
-  <meta name="description" content="Portfolio of Eng. Abdullah Khaled Elbokl — Portfolio">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0A0E1A" />
   <title>Abdullah Khaled Elbokl — Portfolio</title>
+  <link rel="manifest" href="/manifest.json">
+  <!-- Preload critical script to start download earlier -->
+  <link rel="preload" href="/main.dart.js" as="script">
   <style>
     body{background:#0A0E1A;margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:#fff}
     .loader-wrap{display:flex;align-items:center;justify-content:center;height:100vh}
@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <script src="flutter_bootstrap.js" async></script>
+  <script src="/flutter_bootstrap.js" async></script>
   <script>
     (function(){
       var start = performance && performance.now ? performance.now() : Date.now();
@@ -54,9 +54,9 @@
 
       document.addEventListener('flutter-first-frame', function(){ console.log('event:flutter-first-frame'); hideLoaderSoon(); }, { once:true });
       window.addEventListener('load', function(){ console.log('event:window-load'); hideLoaderSoon(); }, { once:true });
+
       setTimeout(function(){ if (shown){ try{ bar.style.width='60%'; }catch(e){}; showRetry(); console.warn('loader:fallback'); } }, 12000);
       window.addEventListener('error', function(e){ console.error('window:error',e); showRetry(); }, { once:true });
-
     })();
   </script>
 </body>
