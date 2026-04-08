@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Eng. Abdullah Khaled Elbokl. Mobile Application Developer specializing in Flutter & SwiftUI. ICPC Regional Finalist. Clean Architecture, production-grade systems.">
+  <meta name="theme-color" content="#0A0E1A">
+  <meta name="author" content="Abdullah Khaled Elbokl">
+  <meta name="keywords" content="Flutter, SwiftUI, Software Engineer, ICPC, Clean Architecture, Bloc, Portfolio, Mobile Developer">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Abdullah Khaled Elbokl — Mobile Application Developer">
+  <meta property="og:description" content="Flutter & SwiftUI Specialist. ICPC Regional Finalist. Building production-grade, backend-authoritative systems.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abdullahbokl.dev">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Abdullah Khaled Elbokl">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Abdullah Khaled Elbokl — Mobile Application Developer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Abdullah Khaled Elbokl",
+    "jobTitle": "Mobile Application Developer",
+    "url": "https://abdullahbokl.dev",
+    "sameAs": [
+      "https://github.com/abdullahbokl",
+      "https://www.linkedin.com/in/abdullahbokl/",
+      "https://leetcode.com/u/Bokl2002/",
+      "https://codeforces.com/profile/Bokl2002"
+    ],
+    "knowsAbout": ["Flutter", "SwiftUI", "Clean Architecture", "Firebase", "Bloc"]
+  }
+  </script>
+
+  <style>
+    /* Loading background to avoid white flash */
+    body { background-color: #0A0E1A; margin: 0; }
+    /* Simple spinner */
+    @keyframes goose-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .goose-loader { width: 56px; height: 56px; border-radius: 50%; border: 6px solid rgba(255,255,255,0.08); border-top-color: #4FC3F7; animation: goose-spin 1s linear infinite; margin: 0 auto 12px; }
+  </style>
+</head>
+<body>
+  <div id="app-loading" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0A0E1A;color:#ffffff;font-family:Inter,system-ui,Arial,sans-serif;">
+    <div style="text-align:center;">
+      <div class="goose-loader" aria-hidden="true"></div>
+      <div style="font-size:16px;opacity:0.95">Loading…</div>
+    </div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Hide/remove our static loader when the window loads or when Flutter replaces the DOM.
+    window.addEventListener('load', function() {
+      var loader = document.getElementById('app-loading');
+      if (loader) loader.style.display = 'none';
+    });
+    // Fallback: try to remove loader after a reasonable timeout in case Flutter doesn't dispatch a first-frame event.
+    setTimeout(function(){
+      var loader = document.getElementById('app-loading');
+      if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+    }, 5000);
+  </script>
+</body>
+</html>
